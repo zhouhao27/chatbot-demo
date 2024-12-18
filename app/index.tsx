@@ -7,9 +7,10 @@ import { FlashList } from "@shopify/flash-list";
 import { useEffect, useRef, useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet, View, Image, Text } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Tts from 'react-native-tts';
+// import Tts from 'react-native-tts';
 import Config from "react-native-config";
 import { tts } from "@/tts";
+import { convertToText, startRecording, stopRecording } from "@/stt";
 
 const styles = StyleSheet.create({
   container: {
@@ -87,13 +88,13 @@ export default function Index() {
   }, [messages]);
 
   const availableVoices = async () => {
-    const voices = await Tts.voices();
-    const availableVoices = voices
-      .filter(v => !v.networkConnectionRequired && !v.notInstalled)
-      .map(v => {
-        return { id: v.id, name: v.name, language: v.language };
-      });
-    console.log('availableVoices:', availableVoices)
+    // const voices = await Tts.voices();
+    // const availableVoices = voices
+    //   .filter(v => !v.networkConnectionRequired && !v.notInstalled)
+    //   .map(v => {
+    //     return { id: v.id, name: v.name, language: v.language };
+    //   });
+    // console.log('availableVoices:', availableVoices)
     // Tts.setDefaultLanguage('zh-CN');
     // Tts.setDefaultLanguage('ta-IN');
   };
@@ -108,6 +109,19 @@ export default function Index() {
       tts(content);
     }} />
   }
+
+  const startRecord = async () => {
+    startRecording();
+  };
+
+  const stopRecord = async () => {
+    const audioFile = await stopRecording();
+
+    const text = await convertToText(audioFile);
+    if (text) {
+      getCompletion(text);
+    }
+  };
 
   return (
     <GestureHandlerRootView>
@@ -147,7 +161,7 @@ export default function Index() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           {messages.length === 0 && <MessageIdeas onMessageSelect={getCompletion} />}
-          <MessageInput onShouldSendMessage={getCompletion} />
+          <MessageInput onShouldSendMessage={getCompletion} onStartRecording={startRecord} onStopRecording={stopRecord} />
         </KeyboardAvoidingView>
       </View>
     </GestureHandlerRootView>

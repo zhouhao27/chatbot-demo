@@ -9,6 +9,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export type MessageInputProps = {
   onShouldSendMessage: (message: string) => void;
   // onReplay: () => void;
+  onStartRecording: () => void;
+  onStopRecording: () => void;
 };
 
 const styles = StyleSheet.create({
@@ -41,9 +43,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const MessageInput = ({ onShouldSendMessage }: MessageInputProps) => {
+const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording }: MessageInputProps) => {
   const [message, setMessage] = useState("");
   const { bottom } = useSafeAreaInsets();
+  const [isRecording, setIsRecording] = useState(false);
 
   const onChangeText = (text: string) => {
     setMessage(text)
@@ -52,6 +55,17 @@ const MessageInput = ({ onShouldSendMessage }: MessageInputProps) => {
   const onSend = () => {
     onShouldSendMessage(message)
     setMessage('')
+  }
+
+  const onHandleRecording = () => {
+    console.log('onHandleRecording:', isRecording)
+    if (isRecording) {
+      setIsRecording(false)
+      onStopRecording()
+    } else {
+      setIsRecording(true)
+      onStartRecording()
+    }
   }
 
   return (
@@ -73,8 +87,8 @@ const MessageInput = ({ onShouldSendMessage }: MessageInputProps) => {
             <Ionicons name="arrow-up-circle-outline" size={24} color={Colors.grey} />
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity>
-            <FontAwesome5 name="microphone" size={24} color={Colors.grey} />
+          <TouchableOpacity onPress={onHandleRecording}>
+            <FontAwesome5 name="microphone" size={24} color={isRecording ? Colors.orange : Colors.grey} />
           </TouchableOpacity>
         )}
       </View>

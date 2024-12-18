@@ -2,9 +2,7 @@ import fs from "react-native-fs";
 import Sound from "react-native-sound";
 import axios from "axios";
 import Config from "react-native-config";
-
-const GOOGLE_TTS_API_URL =
-  "https://texttospeech.googleapis.com/v1/text:synthesize";
+import { GOOGLE_TTS_API_URL, LANGUAGE_CODE } from "@/constants/Config";
 
 export const tts = async (text: string) => {
   try {
@@ -13,7 +11,7 @@ export const tts = async (text: string) => {
       `${GOOGLE_TTS_API_URL}?key=${Config.GOOGLE_API_KEY}`,
       {
         input: { text },
-        voice: { languageCode: "en-US", ssmlGender: "NEUTRAL" },
+        voice: { languageCode: LANGUAGE_CODE, ssmlGender: "NEUTRAL" },
         audioConfig: { audioEncoding: "MP3" },
       }
     );

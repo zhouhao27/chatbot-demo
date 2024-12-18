@@ -21,3 +21,15 @@ To use `Text-To-Speech` and `Speech-To-Text` API:
 • Go to APIs & Services.
 • Go to Credentials. Select CREATE CREDENTIALS and create an API Keys.
 • Restrict this API key only for TTS/STT API.
+
+## NOTICE:
+
+Based on what I tested:
+
+• The recorded audio format must be wav with the following options:
+
+```json
+  sampleRate: 16000, // default 44100
+  channels: 1, // 1 or 2, default 1
+  bitsPerSample: 16, // 8 or 16, default 16
+```
