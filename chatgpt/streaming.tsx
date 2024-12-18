@@ -191,7 +191,7 @@ const postDataStream = async (url: string, model: string, max_tokens: number, me
       }
     });
 
-    console.log("Here!!!!");
+    console.log("Here!!!!: ", text);
     return text;
   } catch (error) {
     console.error("There was a problem with your fetch operation:", error);

@@ -36,3 +36,5 @@ OPENAI_TOKEN = xxxxxxxxxxxxxxxxx
 ```
 
 ## Setup Google Cloud
+
+[Setup Google Cloud for Text-to-Speech and Speech-to-Text API](./google-cloud-setup.md)

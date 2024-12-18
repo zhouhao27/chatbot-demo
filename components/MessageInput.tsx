@@ -8,7 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export type MessageInputProps = {
   onShouldSendMessage: (message: string) => void;
-  onReplay: () => void;
+  // onReplay: () => void;
 };
 
 const styles = StyleSheet.create({
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const MessageInput = ({ onShouldSendMessage, onReplay }: MessageInputProps) => {
+const MessageInput = ({ onShouldSendMessage }: MessageInputProps) => {
   const [message, setMessage] = useState("");
   const { bottom } = useSafeAreaInsets();
 

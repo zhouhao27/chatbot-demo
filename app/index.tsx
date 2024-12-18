@@ -9,6 +9,7 @@ import { KeyboardAvoidingView, Platform, StyleSheet, View, Image, Text } from "r
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Tts from 'react-native-tts';
 import Config from "react-native-config";
+import { tts } from "@/tts";
 
 const styles = StyleSheet.create({
   container: {
@@ -103,15 +104,9 @@ export default function Index() {
 
   const renderMessageItem = ({ item, index }: { item: Message, index: number }) => {
     return <ChatMessage message={item} onReplay={content => {
-      Tts.speak(content);
+      // Tts.speak(content);
+      tts(content);
     }} />
-  }
-
-  const handleReply = () => {
-    // TTS the last message
-    const lastMessage = messages[messages.length - 1].content;
-    console.log('handleReply:', lastMessage)
-    Tts.speak(lastMessage);
   }
 
   return (
@@ -152,7 +147,7 @@ export default function Index() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           {messages.length === 0 && <MessageIdeas onMessageSelect={getCompletion} />}
-          <MessageInput onShouldSendMessage={getCompletion} onReplay={handleReply} />
+          <MessageInput onShouldSendMessage={getCompletion} />
         </KeyboardAvoidingView>
       </View>
     </GestureHandlerRootView>
