@@ -1,13 +1,8 @@
-import AudioRecorderPlayer, {
-  AudioSet,
-} from "react-native-audio-recorder-player";
 import axios from "axios";
 import fs from "react-native-fs";
 import Config from "react-native-config";
 import { GOOGLE_SPEECH_API_URL, LANGUAGE_CODE } from "@/constants/Config";
 import AudioRecord from "react-native-audio-record";
-
-const audioRecorderPlayer = new AudioRecorderPlayer();
 
 export const startRecording = async () => {
   // const result = await audioRecorderPlayer.startRecorder();

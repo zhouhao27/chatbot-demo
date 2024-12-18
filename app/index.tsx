@@ -87,22 +87,6 @@ export default function Index() {
     }
   }, [messages]);
 
-  const availableVoices = async () => {
-    // const voices = await Tts.voices();
-    // const availableVoices = voices
-    //   .filter(v => !v.networkConnectionRequired && !v.notInstalled)
-    //   .map(v => {
-    //     return { id: v.id, name: v.name, language: v.language };
-    //   });
-    // console.log('availableVoices:', availableVoices)
-    // Tts.setDefaultLanguage('zh-CN');
-    // Tts.setDefaultLanguage('ta-IN');
-  };
-
-  useEffect(() => {
-    availableVoices();
-  }, []);
-
   const renderMessageItem = ({ item, index }: { item: Message, index: number }) => {
     return <ChatMessage message={item} onReplay={content => {
       // Tts.speak(content);
