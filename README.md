@@ -33,6 +33,7 @@ Add the `OPENAI_URL` and `OPENAI_TOKEN` in `.env` file. For example:
 ```bash
 OPENAI_URL = https://openai_url
 OPENAI_TOKEN = xxxxxxxxxxxxxxxxx
+GOOGLE_API_KEY = xxxxxxxxxxxxxxx
 ```
 
 ## Setup Google Cloud
