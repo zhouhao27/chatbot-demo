@@ -13,7 +13,7 @@ import { tts } from "@/tts";
 import { convertToText, startRecording, stopRecording } from "@/stt";
 import { getLanguageCode } from "@/storage";
 import { LANGUAGES } from "@/constants/Config";
-import { arrOfLanguages } from "./settings";
+import { useFocusEffect } from "expo-router";
 
 const styles = StyleSheet.create({
   container: {
@@ -97,14 +97,13 @@ export default function Index() {
     }
   }, [messages]);
 
-  useEffect(() => {
+  useFocusEffect(() => {
     getLanguageCode().then((languageCode) => {
-      console.log('languages:', arrOfLanguages)
-      // console.log('language:', languageCode, arrOfLanguages[languageCode || 'en-US'])
-      // setLanguage(arrOfLanguages[languageCode || 'en-US']);
-      // setLanguage(languageCode || 'en-US');
+      if (LANGUAGES.has(languageCode ?? 'en-US')) {
+        setLanguage(LANGUAGES.get(languageCode ?? 'en-US')!);
+      }
     });
-  }, []);
+  });
 
   const renderMessageItem = ({ item, index }: { item: Message, index: number }) => {
     return <ChatMessage message={item} onReplay={content => {

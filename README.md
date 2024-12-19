@@ -46,4 +46,4 @@ GOOGLE_API_KEY = xxxxxxxxxxxxxxx
 
 - Auto detect the language.
 - Integrate to BE API.
-- Integrate to real application. Only UI-related components are expo components. The other part should be able to be used in old React-native version.
+- Integrate to real application. Only some UI-related components are expo components. The other part should be able to be used in old React-native version.

@@ -59,7 +59,7 @@ const ChatMessage = ({ message, onReplay }: ChatMessageProps) => {
       )}
       <View style={styles.messageItemContainer} >
         <Text style={styles.text}>{message.content}</Text>
-        {message.role === Role.Bot && (
+        {message.role === Role.Bot && message.content.length > 0 && (
           <TouchableOpacity onPress={() => onReplay(message.content)} style={{ marginTop: 8 }}>
             <FontAwesome5 name="headphones" size={24} color={Colors.greyLight} />
           </TouchableOpacity>)}

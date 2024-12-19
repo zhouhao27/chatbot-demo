@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const arrOfLanguages = Object.entries(LANGUAGES);
+// export const arrOfLanguages = Object.entries(LANGUAGES);
 
 const Settings = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
@@ -40,10 +40,16 @@ const Settings = () => {
         selectedValue={selectedLanguage}
         onValueChange={onLanguageChange}>
         {
+          Array.from(LANGUAGES.keys())
+            .map((key) => (
+              <Picker.Item key={key} label={LANGUAGES.get(key)} value={key} />
+            ))
+        }
+        {/* {
           arrOfLanguages.map(([key, value]) => (
             <Picker.Item key={key} label={value} value={key} />
           ))
-        }
+        } */}
       </Picker>
     </View>
   )
