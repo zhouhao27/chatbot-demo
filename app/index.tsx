@@ -11,9 +11,11 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Config from "react-native-config";
 import { tts } from "@/tts";
 import { convertToText, startRecording, stopRecording } from "@/stt";
-import { getLanguageCode } from "@/storage";
+import { getLanguageCode, getLLM } from "@/storage";
 import { LANGUAGES } from "@/constants/Config";
 import { useFocusEffect } from "expo-router";
+import { chat } from "@/chatgpt/api";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 const styles = StyleSheet.create({
   container: {
@@ -64,30 +66,47 @@ export default function Index() {
       }
     ])
 
-    const updateRecievedMessage = (done: boolean, delta: string) => {
-      console.log('updateRecievedMessage:', done, delta)
-      if (!done) {
-        // Update the last message with the new delta since we created a new empty message when we start to send message
-        setMessages((prevMessages) => {
-          if (delta.length > 0) {
-            prevMessages[prevMessages.length - 1].content = delta;
-            return [...prevMessages];
-          }
-          return prevMessages;
-        });
-      } else {
-        console.log('done:', done, delta)
-      }
-    }
+    // call chat api
+    const llm = await getLLM();
 
-    // call chatgpt api
-    const response = await postDataStream(
-      Config.OPENAI_URL!,
-      'gpt-3.5-turbo',
-      512,
-      message,
-      updateRecievedMessage
-    );
+    // method 1: Call ChatGPT API
+    if (llm === 'OpenAI') {
+      const updateRecievedMessage = (done: boolean, delta: string) => {
+        console.log('updateRecievedMessage:', done, delta)
+        if (!done) {
+          // Update the last message with the new delta since we created a new empty message when we start to send message
+          setMessages((prevMessages) => {
+            if (delta.length > 0) {
+              prevMessages[prevMessages.length - 1].content = delta;
+              return [...prevMessages];
+            }
+            return prevMessages;
+          });
+        } else {
+          console.log('done:', done, delta)
+        }
+      }
+
+      // call chatgpt api
+      await postDataStream(
+        Config.OPENAI_URL!,
+        'gpt-3.5-turbo',
+        512,
+        message,
+        updateRecievedMessage
+      );
+    } else {
+      // method 2: Call BE API    
+      // TODO: 
+      // 1. session (history) implementation
+      // 2. tools in message
+      const response = await chat(message);
+      const newMessage = response.choices[0].messages[0].content;
+      setMessages((prevMessages) => {
+        prevMessages[prevMessages.length - 1].content = newMessage;
+        return [...prevMessages];
+      });
+    }
   }
 
   useEffect(() => {

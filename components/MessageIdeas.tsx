@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Colors from '@/constants/Colors';
 
 const PredefinedMessages = [
-  { title: 'Explain React Native', text: "like I'm five years old" },
+  { title: 'Let me know', text: "what are you able to do?" },
   { title: 'Suggest fun activites', text: 'for a family visting San Francisco' },
   { title: 'Recommend a dish', text: "to impress a date who's a picky eater" },
 ];

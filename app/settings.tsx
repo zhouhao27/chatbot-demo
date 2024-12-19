@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Picker } from '@react-native-picker/picker';
 import { LANGUAGES } from '@/constants/Config';
-import { getLanguageCode, setLanguageCode } from '@/storage';
+import { getLanguageCode, getLLM, setLanguageCode, setLLM } from '@/storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,19 +17,26 @@ const styles = StyleSheet.create({
   },
 });
 
-// export const arrOfLanguages = Object.entries(LANGUAGES);
-
 const Settings = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
+  const [selectedLLM, setSelectedLLM] = useState('OpenAI');
 
   const onLanguageChange = (itemValue: string, itemIndex: number) => {
     setLanguageCode(itemValue);
     setSelectedLanguage(itemValue)
   };
 
+  const onSelectLLM = (itemValue: string, itemIndex: number) => {
+    setLLM(itemValue);
+    setSelectedLLM(itemValue)
+  };
+
   useEffect(() => {
     getLanguageCode().then((languageCode) => {
       setSelectedLanguage(languageCode || 'en-US');
+    });
+    getLLM().then((llm) => {
+      setSelectedLLM(llm || 'OpenAI');
     });
   }, []);
 
@@ -45,12 +52,15 @@ const Settings = () => {
               <Picker.Item key={key} label={LANGUAGES.get(key)} value={key} />
             ))
         }
-        {/* {
-          arrOfLanguages.map(([key, value]) => (
-            <Picker.Item key={key} label={value} value={key} />
-          ))
-        } */}
       </Picker>
+      <Text style={styles.title}>Large Language model:</Text>
+      <Picker
+        selectedValue={selectedLLM}
+        onValueChange={onSelectLLM}>
+        <Picker.Item key={0} label='OpenAI' value='OpenAI' />
+        <Picker.Item key={1} label='BE' value='BE' />
+      </Picker>
+
     </View>
   )
 }
