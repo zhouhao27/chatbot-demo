@@ -1,8 +1,9 @@
 import axios from "axios";
 import fs from "react-native-fs";
 import Config from "react-native-config";
-import { GOOGLE_SPEECH_API_URL, LANGUAGE_CODE } from "@/constants/Config";
+import { GOOGLE_SPEECH_API_URL } from "@/constants/Config";
 import AudioRecord from "react-native-audio-record";
+import { getLanguageCode } from "@/storage";
 
 export const startRecording = async () => {
   // const result = await audioRecorderPlayer.startRecorder();
@@ -40,6 +41,7 @@ export const stopRecording = async () => {
 
 export const convertToText = async (audioPath: string) => {
   const base64Audio = await fs.readFile(audioPath, "base64");
+  const langaugeCode = (await getLanguageCode()) || "en-US";
 
   try {
     const response = await axios.post(
@@ -48,7 +50,7 @@ export const convertToText = async (audioPath: string) => {
         config: {
           encoding: "LINEAR16",
           sampleRateHertz: 16000,
-          languageCode: "en-US",
+          languageCode: langaugeCode,
         },
         audio: {
           content: base64Audio,

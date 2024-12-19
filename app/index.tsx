@@ -11,6 +11,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Config from "react-native-config";
 import { tts } from "@/tts";
 import { convertToText, startRecording, stopRecording } from "@/stt";
+import { getLanguageCode } from "@/storage";
+import { LANGUAGES } from "@/constants/Config";
+import { arrOfLanguages } from "./settings";
 
 const styles = StyleSheet.create({
   container: {
@@ -30,11 +33,18 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'center',
   },
+  prompt: {
+    padding: 16,
+    fontSize: 16,
+    textAlign: 'center',
+    color: 'gray',
+  }
 });
 
 export default function Index() {
   const [messages, setMessages] = useState<Message[]>([]);
   const flashListRef = useRef<FlashList<Message>>(null);
+  const [language, setLanguage] = useState<string>('English');
 
   const getCompletion = async (message: string) => {
     console.log('getCompletion:', message)
@@ -87,6 +97,15 @@ export default function Index() {
     }
   }, [messages]);
 
+  useEffect(() => {
+    getLanguageCode().then((languageCode) => {
+      console.log('languages:', arrOfLanguages)
+      // console.log('language:', languageCode, arrOfLanguages[languageCode || 'en-US'])
+      // setLanguage(arrOfLanguages[languageCode || 'en-US']);
+      // setLanguage(languageCode || 'en-US');
+    });
+  }, []);
+
   const renderMessageItem = ({ item, index }: { item: Message, index: number }) => {
     return <ChatMessage message={item} onReplay={content => {
       // Tts.speak(content);
@@ -115,6 +134,7 @@ export default function Index() {
             flex: 1,
           }}
         >
+          <Text style={styles.prompt}>{`Current language is ${language}. Please use this language to ask questions.`}</Text>
           {messages.length === 0 && (
             <View style={styles.logoContainer}>
               <Image

@@ -1,5 +1,7 @@
 # An Chat Bot Demo
 
+A POC application to demostrate the ChatBot talke to OpenAI. It supports TTS/STT with Google Cloud Text-to-Speech and Speech-to-Text.
+
 ## Get started
 
 1. Install dependencies
@@ -39,3 +41,9 @@ GOOGLE_API_KEY = xxxxxxxxxxxxxxx
 ## Setup Google Cloud
 
 [Setup Google Cloud for Text-to-Speech and Speech-to-Text API](./google-cloud-setup.md)
+
+## TODO:
+
+- Auto detect the language.
+- Integrate to BE API.
+- Integrate to real application. Only UI-related components are expo components. The other part should be able to be used in old React-native version.

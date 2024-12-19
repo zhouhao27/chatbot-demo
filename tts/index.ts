@@ -2,16 +2,19 @@ import fs from "react-native-fs";
 import Sound from "react-native-sound";
 import axios from "axios";
 import Config from "react-native-config";
-import { GOOGLE_TTS_API_URL, LANGUAGE_CODE } from "@/constants/Config";
+import { GOOGLE_TTS_API_URL } from "@/constants/Config";
+import { getLanguageCode } from "@/storage";
 
 export const tts = async (text: string) => {
+  const langaugeCode = (await getLanguageCode()) || "en-US";
+
   try {
     // Step 1: Call Google TTS API
     const response = await axios.post(
       `${GOOGLE_TTS_API_URL}?key=${Config.GOOGLE_API_KEY}`,
       {
         input: { text },
-        voice: { languageCode: LANGUAGE_CODE, ssmlGender: "NEUTRAL" },
+        voice: { languageCode: langaugeCode, ssmlGender: "NEUTRAL" },
         audioConfig: { audioEncoding: "MP3" },
       }
     );
