@@ -5,7 +5,7 @@ import Config from "react-native-config";
 import { GOOGLE_TTS_API_URL } from "@/constants/Config";
 import { getLanguageCode } from "@/storage";
 
-export const tts = async (text: string) => {
+export const tts = async (text: string, onComplete: () => void) => {
   const langaugeCode = (await getLanguageCode()) || "en-US";
 
   try {
@@ -31,6 +31,7 @@ export const tts = async (text: string) => {
     const sound = new Sound(filePath, "", (error) => {
       if (error) {
         console.log("Failed to load the sound", error);
+        onComplete();
         return;
       }
       sound.play((success) => {
@@ -39,9 +40,11 @@ export const tts = async (text: string) => {
         } else {
           console.log("Playback failed due to an audio decoding error");
         }
+        onComplete();
       });
     });
   } catch (error) {
     console.error("Error during TTS processing:", error);
+    onComplete();
   }
 };

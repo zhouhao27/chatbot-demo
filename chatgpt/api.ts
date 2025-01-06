@@ -62,9 +62,13 @@ export const fetchData = async <T>(options: RequestParams): Promise<T> => {
 };
 
 // TODO: To support session. Need to send history in a session as an array
-export const chat = async (text: string) => {
+export const chat = async (
+  text: string,
+  conversation_id?: string | undefined
+) => {
   const request: ChatRequestBody = {
     language: "",
+    conversation_id,
     messages: [
       {
         role: "User",
@@ -73,6 +77,7 @@ export const chat = async (text: string) => {
     ],
   };
 
+  console.log("chat: request:", request);
   const content = await fetchData<ChatResponse>({
     url: "https://w71o53mmwf.execute-api.ap-southeast-1.amazonaws.com/v1/generate",
     method: RequestMethod.POST,

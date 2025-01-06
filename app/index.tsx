@@ -15,7 +15,6 @@ import { getLanguageCode, getLLM } from "@/storage";
 import { LANGUAGES } from "@/constants/Config";
 import { useFocusEffect } from "expo-router";
 import { chat } from "@/chatgpt/api";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 const styles = StyleSheet.create({
   container: {
@@ -47,6 +46,9 @@ export default function Index() {
   const [messages, setMessages] = useState<Message[]>([]);
   const flashListRef = useRef<FlashList<Message>>(null);
   const [language, setLanguage] = useState<string>('English');
+  const [engine, setEngine] = useState<string>('OpenAI');
+  const [session, setSession] = useState<string | undefined>(undefined);
+  const isReplayRunning = useRef(false);
 
   const getCompletion = async (message: string) => {
     console.log('getCompletion:', message)
@@ -100,7 +102,9 @@ export default function Index() {
       // TODO: 
       // 1. session (history) implementation
       // 2. tools in message
-      const response = await chat(message);
+      const response = await chat(message, session);
+      const id = response.id;
+      setSession(id);
       const newMessage = response.choices[0].messages[0].content;
       setMessages((prevMessages) => {
         prevMessages[prevMessages.length - 1].content = newMessage;
@@ -122,13 +126,30 @@ export default function Index() {
         setLanguage(LANGUAGES.get(languageCode ?? 'en-US')!);
       }
     });
+    getLLM().then((llm) => {
+      setEngine(llm ?? 'OpenAI');
+    });
   });
 
+  const onReplay = async (content: string) => {
+    if (isReplayRunning.current) {
+      return;
+    }
+
+    isReplayRunning.current = true;
+
+    try {
+      await tts(content, () => {
+        isReplayRunning.current = false;
+      });
+    } catch (error) {
+      console.error('Error during TTS processing:', error);
+      isReplayRunning.current = false;
+    }
+  };
+
   const renderMessageItem = ({ item, index }: { item: Message, index: number }) => {
-    return <ChatMessage message={item} onReplay={content => {
-      // Tts.speak(content);
-      tts(content);
-    }} />
+    return <ChatMessage message={item} isPlaying={isReplayRunning.current} onReplay={onReplay} />
   }
 
   const startRecord = async () => {
@@ -153,13 +174,13 @@ export default function Index() {
           }}
         >
           <Text style={styles.prompt}>{`Current language is ${language}. Please use this language to ask questions.`}</Text>
-          {messages.length === 0 && (
+          {/* {messages.length === 0 && (
             <View style={styles.logoContainer}>
               <Image
                 source={require('../assets/images/react-logo.png')}
                 style={styles.image} />
             </View>
-          )}
+          )} */}
           <FlashList
             ref={flashListRef}
             data={messages}
@@ -182,7 +203,7 @@ export default function Index() {
           }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-          {messages.length === 0 && <MessageIdeas onMessageSelect={getCompletion} />}
+          {/* {messages.length === 0 && <MessageIdeas onMessageSelect={getCompletion} />} */}
           <MessageInput onShouldSendMessage={getCompletion} onStartRecording={startRecord} onStopRecording={stopRecord} />
         </KeyboardAvoidingView>
       </View>

@@ -58,6 +58,8 @@ export const convertToText = async (audioPath: string) => {
       }
     );
 
+    console.log("response:", response.data);
+
     const transcription = response.data.results
       .map((result: any) => result.alternatives[0].transcript)
       .join("\n");

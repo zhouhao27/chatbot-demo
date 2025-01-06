@@ -1,5 +1,5 @@
 import Colors from "@/constants/Colors";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Foundation, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
@@ -71,9 +71,6 @@ const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording }
   return (
     <BlurView intensity={80} style={{ paddingBottom: bottom, paddingTop: 10 }}>
       <View style={styles.row}>
-        {/* <TouchableOpacity onPress={onReplay} style={[styles.roundBtn]}>
-          <FontAwesome5 name="headphones" size={24} color={Colors.grey} />
-        </TouchableOpacity> */}
         <TextInput
           autoFocus
           placeholder="Message"
@@ -88,7 +85,11 @@ const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording }
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={onHandleRecording}>
-            <FontAwesome5 name="microphone" size={24} color={isRecording ? Colors.orange : Colors.grey} />
+            {
+              isRecording ? <MaterialCommunityIcons name="record-circle-outline" size={24} color="red" /> :
+                <FontAwesome5 name="microphone" size={24} color={Colors.grey} />
+            }
+
           </TouchableOpacity>
         )}
       </View>
