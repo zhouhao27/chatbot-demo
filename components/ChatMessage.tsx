@@ -43,13 +43,12 @@ type ChatMessageProps = {
 }
 
 const ChatMessage = ({ isPlaying, message, onReplay }: ChatMessageProps) => {
-  console.log('isPlaying:', isPlaying)
   return (
     <View style={styles.row}>
       {message.role === Role.Bot ? (
         <View style={styles.item} >
           <Image
-            source={require('../assets/images/react-logo.png')}
+            source={require('../assets/images/Chatbot.png')}
             style={styles.avatar}
           />
         </View>
@@ -61,7 +60,7 @@ const ChatMessage = ({ isPlaying, message, onReplay }: ChatMessageProps) => {
       )}
       <View style={styles.messageItemContainer} >
         <Text style={styles.text}>{message.content}</Text>
-        {message.role === Role.Bot && message.content.length > 0 && !isPlaying && (
+        {message.role === Role.Bot && message.content.length > 0 && (
           <TouchableOpacity onPress={() => onReplay(message.content)} style={{ marginTop: 8 }}>
             <FontAwesome5 name="headphones" size={24} color={Colors.greyLight} />
           </TouchableOpacity>)}

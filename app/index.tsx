@@ -114,8 +114,7 @@ export default function Index() {
   }
 
   useEffect(() => {
-    if (flashListRef.current) {
-      console.log('scrollToEnd')
+    if (flashListRef.current && messages.length > 0) {
       flashListRef.current.scrollToEnd({ animated: true });
     }
   }, [messages]);
@@ -132,20 +131,25 @@ export default function Index() {
   });
 
   const onReplay = async (content: string) => {
-    if (isReplayRunning.current) {
-      return;
-    }
 
-    isReplayRunning.current = true;
+    tts(content, () => {
+      console.log('TTS done')
+    })
 
-    try {
-      await tts(content, () => {
-        isReplayRunning.current = false;
-      });
-    } catch (error) {
-      console.error('Error during TTS processing:', error);
-      isReplayRunning.current = false;
-    }
+    // if (isReplayRunning.current) {
+    //   return;
+    // }
+
+    // isReplayRunning.current = true;
+
+    // try {
+    //   await tts(content, () => {
+    //     isReplayRunning.current = false;
+    //   });
+    // } catch (error) {
+    //   console.error('Error during TTS processing:', error);
+    //   isReplayRunning.current = false;
+    // }
   };
 
   const renderMessageItem = ({ item, index }: { item: Message, index: number }) => {

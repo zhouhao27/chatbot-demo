@@ -4,10 +4,45 @@ import Config from "react-native-config";
 import { GOOGLE_SPEECH_API_URL } from "@/constants/Config";
 import AudioRecord from "react-native-audio-record";
 import { getLanguageCode } from "@/storage";
+import { PermissionsAndroid, Platform } from "react-native";
+
+const requestPermission = async () => {
+  if (Platform.OS === "android") {
+    try {
+      const grants = await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      ]);
+
+      console.log("write external storage", grants);
+
+      if (
+        grants["android.permission.WRITE_EXTERNAL_STORAGE"] ===
+          PermissionsAndroid.RESULTS.GRANTED &&
+        grants["android.permission.READ_EXTERNAL_STORAGE"] ===
+          PermissionsAndroid.RESULTS.GRANTED &&
+        grants["android.permission.RECORD_AUDIO"] ===
+          PermissionsAndroid.RESULTS.GRANTED
+      ) {
+        console.log("Permissions granted");
+      } else {
+        console.log("All required permissions not granted");
+        return;
+      }
+    } catch (err) {
+      console.warn(err);
+      return;
+    }
+  }
+};
 
 export const startRecording = async () => {
   // const result = await audioRecorderPlayer.startRecorder();
   // console.log("Recording started: ", result);
+
+  // request permission
+  await requestPermission();
 
   // use AudioRecord to start recording
   const options = {
@@ -37,6 +72,7 @@ export const stopRecording = async () => {
   });
 
   return audioFile;
+  // return "/data/user/0/com.anonymous.chatgpt/files/sound.wav";
 };
 
 export const convertToText = async (audioPath: string) => {
@@ -44,19 +80,18 @@ export const convertToText = async (audioPath: string) => {
   const langaugeCode = (await getLanguageCode()) || "en-US";
 
   try {
-    const response = await axios.post(
-      `${GOOGLE_SPEECH_API_URL}?key=${Config.GOOGLE_API_KEY}`,
-      {
-        config: {
-          encoding: "LINEAR16",
-          sampleRateHertz: 16000,
-          languageCode: langaugeCode,
-        },
-        audio: {
-          content: base64Audio,
-        },
-      }
-    );
+    const url = `${GOOGLE_SPEECH_API_URL}?key=${Config.GOOGLE_API_KEY}`;
+    console.log("url:", url);
+    const response = await axios.post(url, {
+      config: {
+        encoding: "LINEAR16",
+        sampleRateHertz: 16000,
+        languageCode: langaugeCode,
+      },
+      audio: {
+        content: base64Audio,
+      },
+    });
 
     console.log("response:", response.data);
 

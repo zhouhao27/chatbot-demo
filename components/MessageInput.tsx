@@ -1,7 +1,6 @@
 import Colors from "@/constants/Colors";
 import { FontAwesome5, Foundation, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
-import { useState } from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -69,7 +68,7 @@ const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording }
   }
 
   return (
-    <BlurView intensity={80} style={{ paddingBottom: bottom, paddingTop: 10 }}>
+    <View style={{ paddingBottom: bottom + 10, paddingTop: 10, backgroundColor: Colors.light }}>
       <View style={styles.row}>
         <TextInput
           autoFocus
@@ -93,7 +92,7 @@ const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording }
           </TouchableOpacity>
         )}
       </View>
-    </BlurView >
+    </View>
   );
 };
 
