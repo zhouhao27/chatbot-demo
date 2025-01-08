@@ -6,7 +6,8 @@ import { TouchableOpacity } from "react-native";
 
 export default function RootLayout() {
   const onSettings = () => {
-    router.push('./settings');
+    console.log('onSettings');
+    router.push('/settings');
   };
 
   return (
@@ -15,16 +16,11 @@ export default function RootLayout() {
         name="index"
         options={{
           title: 'TTM ChatBot',
-          // headerLeft: () => (
-          //   <TouchableOpacity onPress={() => console.log('headerLeft')}>
-          //     <MaterialIcons name="chat-bubble-outline" size={24} color={Colors.grey} />
+          // headerRight: () => (
+          //   <TouchableOpacity onPress={onSettings}>
+          //     <FontAwesome5 name="cog" size={24} color={Colors.grey} />
           //   </TouchableOpacity>
           // ),
-          headerRight: () => (
-            <TouchableOpacity onPress={onSettings}>
-              <FontAwesome5 name="cog" size={24} color={Colors.grey} />
-            </TouchableOpacity>
-          ),
         }}
       />
       <Stack.Screen

@@ -13,7 +13,7 @@ import { tts } from "@/tts";
 import { convertToText, startRecording, stopRecording } from "@/stt";
 import { getLanguageCode, getLLM } from "@/storage";
 import { LANGUAGES } from "@/constants/Config";
-import { useFocusEffect } from "expo-router";
+import { Link, useFocusEffect } from "expo-router";
 import { chat } from "@/chatgpt/api";
 
 const styles = StyleSheet.create({
@@ -39,7 +39,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     color: 'gray',
+  },
+  link: {
+    padding: 16,
+    fontSize: 16,
+    textAlign: 'center',
+    color: 'blue',
+    textDecorationLine: 'underline'
   }
+
 });
 
 export default function Index() {
@@ -178,6 +186,7 @@ export default function Index() {
           }}
         >
           <Text style={styles.prompt}>{`Current language is ${language}. Please use this language to ask questions.`}</Text>
+          <Link href="/settings"><Text style={styles.link}>Settings</Text></Link>
           {/* {messages.length === 0 && (
             <View style={styles.logoContainer}>
               <Image
