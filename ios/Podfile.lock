@@ -217,8 +217,6 @@ PODS:
     - Yoga
   - ExpoAsset (11.0.1):
     - ExpoModulesCore
-  - ExpoBlur (14.0.1):
-    - ExpoModulesCore
   - ExpoFileSystem (18.0.4):
     - ExpoModulesCore
   - ExpoFont (13.0.1):
@@ -1951,7 +1949,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNPermissions (5.2.1):
+  - RNPermissions (5.2.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2124,7 +2122,6 @@ DEPENDENCIES:
   - expo-dev-menu (from `../node_modules/expo-dev-menu`)
   - expo-dev-menu-interface (from `../node_modules/expo-dev-menu-interface/ios`)
   - ExpoAsset (from `../node_modules/expo-asset/ios`)
-  - ExpoBlur (from `../node_modules/expo-blur/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
   - ExpoFont (from `../node_modules/expo-font/ios`)
   - ExpoHaptics (from `../node_modules/expo-haptics/ios`)
@@ -2241,8 +2238,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-dev-menu-interface/ios"
   ExpoAsset:
     :path: "../node_modules/expo-asset/ios"
-  ExpoBlur:
-    :path: "../node_modules/expo-blur/ios"
   ExpoFileSystem:
     :path: "../node_modules/expo-file-system/ios"
   ExpoFont:
@@ -2429,7 +2424,6 @@ SPEC CHECKSUMS:
   expo-dev-menu: 460327af62e2b16fe79af0082753c48e82ba099f
   expo-dev-menu-interface: 4baf2f8b3b79ce37cf4b900e4b3ba6df3384f0a1
   ExpoAsset: 8138f2a9ec55ae1ad7c3871448379f7d97692d15
-  ExpoBlur: 562b3da84d3cd79016c411671eaf71a404266415
   ExpoFileSystem: dc2679a2b5d4c465ca881129074da95faee943d5
   ExpoFont: 7522d869d84ee2ee8093ee997fef5b86f85d856b
   ExpoHaptics: e636188d1d5f7ccb79f3c1bfab47aaf5a1768c73
@@ -2511,7 +2505,7 @@ SPEC CHECKSUMS:
   RNFlashList: 6f169ad83e52579b7754cbbcec1b004c27d82c93
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: fc5ce5bf284640d3af6431c3a5c3bc121e98d045
-  RNPermissions: 39a675044df2cacca9216aa2141959e13faea625
+  RNPermissions: c719414c5143c30fd11f98fe579c8efcb3586f67
   RNReanimated: 006a5d3961bf09c1e96d62ed436e02b2e43b89bb
   RNScreens: 2fe13c8d610ef2d9d5ace2e7d85b716ec0f5217c
   RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
