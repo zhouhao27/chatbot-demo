@@ -4,6 +4,7 @@ import axios from "axios";
 import Config from "react-native-config";
 import { GOOGLE_TTS_API_URL } from "@/constants/Config";
 import { getLanguageCode } from "@/storage";
+import { Alert } from "react-native";
 
 export const tts = async (text: string, onComplete: () => void) => {
   const langaugeCode = (await getLanguageCode()) || "en-US";
@@ -28,23 +29,48 @@ export const tts = async (text: string, onComplete: () => void) => {
     console.log("Audio file saved at: ", filePath);
 
     // Step 3: Play the audio file
-    const sound = new Sound(filePath, "", (error) => {
-      if (error) {
-        console.log("Failed to load the sound", error);
-        onComplete();
-        return;
-      }
-      sound.play((success) => {
-        if (success) {
-          console.log("Successfully played audio");
-        } else {
-          console.log("Playback failed due to an audio decoding error");
-        }
-        onComplete();
-      });
-    });
+    playSound(filePath, onComplete);
+    // Sound.setCategory("Playback", true);
+    // const sound = new Sound(filePath, "", (error) => {
+    //   if (error) {
+    //     Alert.alert("Error", "Failed to load the sound");
+    //     onComplete();
+    //     return;
+    //   }
+    //   sound.play((success) => {
+    //     if (success) {
+    //       console.log("Successfully played audio");
+    //     } else {
+    //       Alert.alert(
+    //         "Error",
+    //         "Playback failed due to an audio decoding error"
+    //       );
+    //     }
+    //     onComplete();
+    //   });
+    // });
   } catch (error) {
-    console.error("Error during TTS processing:", error);
+    Alert.alert("Error", "Failed to generate TTS audio");
     onComplete();
   }
+};
+
+export const playSound = async (filePath: string, onComplete: () => void) => {
+  Sound.setCategory("Playback", true);
+  const sound = new Sound(filePath, "", (error) => {
+    if (error) {
+      Alert.alert("Error", "Failed to load the sound");
+      onComplete();
+      return;
+    }
+    console.log("Sound loaded successfully");
+    sound.play((success) => {
+      if (success) {
+        console.log("Successfully played audio");
+      } else {
+        Alert.alert("Error", "Playback failed due to an audio decoding error");
+      }
+      onComplete();
+    });
+  });
 };
