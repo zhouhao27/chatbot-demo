@@ -71,13 +71,12 @@ export const chat = async (
 
   const request: ChatRequestBody = {
     language: lang || "en",
-    // TODO: add conversation_id will affect the language returned from BE. So don't use it for the time being.
-    // conversation_id,
+    conversation_id,
     messages: [
-      {
-        role: "system",
-        content: "Please response in the same langauge as the user query",
-      },
+      // {
+      //   role: "system",
+      //   content: "Please response in the same langauge as the user query",
+      // },
       {
         role: "User",
         content: text,
