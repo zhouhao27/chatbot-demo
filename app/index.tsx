@@ -1,6 +1,5 @@
 import postDataStream from "@/chatgpt/streaming";
 import ChatMessage from "@/components/ChatMessage";
-import MessageIdeas from "@/components/MessageIdeas";
 import MessageInput from "@/components/MessageInput";
 import { Message, Role } from "@/models";
 import { FlashList } from "@shopify/flash-list";
@@ -15,6 +14,7 @@ import { getLanguageCode, getLLM } from "@/storage";
 import { LANGUAGES } from "@/constants/Config";
 import { Link, useFocusEffect } from "expo-router";
 import { chat } from "@/chatgpt/api";
+import TopQuestions from "@/components/TopQuestions";
 
 const styles = StyleSheet.create({
   container: {
@@ -177,6 +177,11 @@ export default function Index() {
     }
   };
 
+  const startNewSession = () => {
+    setSession(undefined);
+    setMessages([]);
+  };
+
   return (
     <GestureHandlerRootView>
       <View style={styles.container}>
@@ -216,8 +221,8 @@ export default function Index() {
           }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-          {/* {messages.length === 0 && <MessageIdeas onMessageSelect={getCompletion} />} */}
-          <MessageInput onShouldSendMessage={getCompletion} onStartRecording={startRecord} onStopRecording={stopRecord} />
+          {messages.length === 0 && <TopQuestions onMessageSelect={getCompletion} />}
+          <MessageInput onShouldSendMessage={getCompletion} onStartRecording={startRecord} onStopRecording={stopRecord} onNewSession={startNewSession} />
         </KeyboardAvoidingView>
       </View>
     </GestureHandlerRootView>

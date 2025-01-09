@@ -1,5 +1,5 @@
 import Colors from "@/constants/Colors";
-import { FontAwesome5, Foundation, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather, FontAwesome5, Foundation, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -10,6 +10,7 @@ export type MessageInputProps = {
   // onReplay: () => void;
   onStartRecording: () => void;
   onStopRecording: () => void;
+  onNewSession: () => void;
 };
 
 const styles = StyleSheet.create({
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording }: MessageInputProps) => {
+const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording, onNewSession }: MessageInputProps) => {
   const [message, setMessage] = useState("");
   const { bottom } = useSafeAreaInsets();
   const [isRecording, setIsRecording] = useState(false);
@@ -70,6 +71,9 @@ const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording }
   return (
     <View style={{ paddingBottom: bottom + 10, paddingTop: 10, backgroundColor: Colors.light }}>
       <View style={styles.row}>
+        <TouchableOpacity onPress={onNewSession}>
+          <Feather name="plus" size={24} color={Colors.grey} />
+        </TouchableOpacity>
         <TextInput
           autoFocus
           placeholder="Message"

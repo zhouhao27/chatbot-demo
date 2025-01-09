@@ -1,5 +1,6 @@
 import { Message } from "@/models";
 import { ChatRequestBody, ChatResponse } from "./model";
+import { getLanguageCode } from "@/storage";
 
 export enum RequestMethod {
   GET = "GET",
@@ -61,15 +62,22 @@ export const fetchData = async <T>(options: RequestParams): Promise<T> => {
   }
 };
 
-// TODO: To support session. Need to send history in a session as an array
 export const chat = async (
   text: string,
   conversation_id?: string | undefined
 ) => {
+  const lang = await getLanguageCode();
+  // TODO: map to the correct language code
+
   const request: ChatRequestBody = {
-    language: "",
-    conversation_id,
+    language: lang || "en",
+    // TODO: add conversation_id will affect the language returned from BE. So don't use it for the time being.
+    // conversation_id,
     messages: [
+      {
+        role: "system",
+        content: "Please response in the same langauge as the user query",
+      },
       {
         role: "User",
         content: text,

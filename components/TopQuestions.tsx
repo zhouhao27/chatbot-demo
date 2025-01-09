@@ -4,9 +4,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Colors from '@/constants/Colors';
 
 const PredefinedMessages = [
-  { title: 'Let me know', text: "what are you able to do?" },
-  { title: 'Suggest fun activites', text: 'for a family visting San Francisco' },
-  { title: 'Recommend a dish', text: "to impress a date who's a picky eater" },
+  { text: "Employer no give money for 3 months?" },
+  { text: 'What is talk to MOM' },
+  { text: "What are the laws in Singapore" },
 ];
 
 type MessageIdeasProps = {
@@ -30,11 +30,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const MessageIdeas = ({ onMessageSelect }: MessageIdeasProps) => {
+const TopQuestions = ({ onMessageSelect }: MessageIdeasProps) => {
   return (
     <View>
       <ScrollView
-        horizontal
+        horizontal={false}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
           paddingHorizontal: 16,
@@ -46,9 +46,9 @@ const MessageIdeas = ({ onMessageSelect }: MessageIdeasProps) => {
           <TouchableOpacity
             key={index}
             style={styles.container}
-            onPress={() => onMessageSelect(`${message.title} ${message.text}`)}
+            onPress={() => onMessageSelect(`${message.text}`)}
           >
-            <Text style={styles.title}>{message.title}</Text>
+            {/* <Text style={styles.title}>{message.title}</Text> */}
             <Text style={styles.text}>{message.text}</Text>
           </TouchableOpacity>
         ))}
@@ -57,4 +57,4 @@ const MessageIdeas = ({ onMessageSelect }: MessageIdeasProps) => {
   )
 }
 
-export default MessageIdeas
+export default TopQuestions
