@@ -3,6 +3,7 @@ import React from 'react'
 import { Message, Role } from '@/models'
 import { FontAwesome5 } from '@expo/vector-icons'
 import Colors from '@/constants/Colors'
+import { Flow } from 'react-native-animated-spinkit'
 
 const styles = StyleSheet.create({
   row: {
@@ -59,7 +60,9 @@ const ChatMessage = ({ isPlaying, message, onReplay }: ChatMessageProps) => {
         />
       )}
       <View style={styles.messageItemContainer} >
-        <Text style={styles.text}>{message.content}</Text>
+        {
+          message.content.length == 0 ? <Flow size={24} color={Colors.grey} /> : <Text style={styles.text}>{message.content}</Text>
+        }
         {message.role === Role.Bot && message.content.length > 0 && (
           <TouchableOpacity onPress={() => onReplay(message.content)} style={{ marginTop: 8 }}>
             <FontAwesome5 name="headphones" size={24} color={Colors.greyLight} />

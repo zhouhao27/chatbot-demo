@@ -72,7 +72,7 @@ export default function Index() {
       },
       {
         role: Role.Bot,
-        content: '......',
+        content: '',
       }
     ])
 
@@ -161,6 +161,7 @@ export default function Index() {
   };
 
   const renderMessageItem = ({ item, index }: { item: Message, index: number }) => {
+    console.log('renderMessageItem:', item)
     return <ChatMessage message={item} isPlaying={isReplayRunning.current} onReplay={onReplay} />
   }
 
