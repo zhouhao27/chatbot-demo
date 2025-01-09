@@ -72,7 +72,7 @@ export default function Index() {
       },
       {
         role: Role.Bot,
-        content: '',
+        content: '......',
       }
     ])
 
