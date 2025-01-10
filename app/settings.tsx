@@ -1,6 +1,5 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { Picker } from '@react-native-picker/picker';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { LANGUAGES } from '@/constants';
 import { getLanguageCode, getLLM, setLanguageCode, setLLM } from '@/storage';
 import { Feather } from '@expo/vector-icons';
@@ -12,54 +11,86 @@ import DeviceInfo from 'react-native-device-info';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16
+    padding: 16,
+    backgroundColor: '#f8f9fa',
   },
   title: {
-    paddingTop: 16,
+    paddingTop: 10,
+    paddingBottom: 12,
     alignSelf: 'flex-start',
-    fontSize: 20,
-    fontWeight: 'bold'
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
   },
   text: {
     paddingTop: 16,
     alignSelf: 'flex-start',
     fontSize: 16,
-    color: 'gray'
+    color: 'gray',
   },
-
+  option: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginVertical: 6,
+    borderRadius: 8,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  selectedOption: {
+    backgroundColor: '#e0f7fa',
+    borderColor: '#00acc1',
+  },
+  optionText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  versionContainer: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    right: 16,
+    alignItems: 'center',
+  },
+  versionText: {
+    fontSize: 14,
+    color: 'gray',
+  },
 });
 
-const Settings = () => {
+const Settings = ({ toggleSettings }: { toggleSettings: () => void }) => {
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
-  const [selectedLLM, setSelectedLLM] = useState('OpenAI');
+  const [selectedLLM, setSelectedLLM] = useState('BE');
   const [version, setVersion] = useState('');
 
-  const onLanguageChange = (itemValue: string, itemIndex: number) => {
-    setLanguageCode(itemValue);
-    setSelectedLanguage(itemValue)
+  const onLanguageChange = (language: string) => {
+    setLanguageCode(language);
+    setSelectedLanguage(language);
+    // toggleSettings(); // Call toggleSettings to hide the settings screen
   };
 
-  const onSelectLLM = (itemValue: string, itemIndex: number) => {
-    setLLM(itemValue);
-    setSelectedLLM(itemValue)
+  const onSelectLLM = (llm: string) => {
+    setLLM(llm);
+    setSelectedLLM(llm);
   };
 
   const onTestSound = async () => {
     const soundFile = Asset.fromModule(require('../assets/sounds/test.mp3'));
     await soundFile.downloadAsync();
     if (soundFile.localUri) {
-      playSound(soundFile.localUri, () => { })
+      playSound(soundFile.localUri, () => { });
     }
   };
 
   const getVersion = async () => {
-    // const version = await DeviceInfo.getVersion();
-    // const build = await DeviceInfo.getBuildNumber();
-    // setVersion(`version: ${version}, build: ${build}`);
-
     const readableVersion = DeviceInfo.getReadableVersion();
     setVersion(`version: ${readableVersion}`);
-  }
+  };
 
   useEffect(() => {
     getLanguageCode().then((languageCode) => {
@@ -73,34 +104,27 @@ const Settings = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{version}</Text>
-      <Text style={styles.title}>Select language:</Text>
-      <Picker
-        selectedValue={selectedLanguage}
-        onValueChange={onLanguageChange}>
-        {
-          Array.from(LANGUAGES.keys())
-            .map((key) => (
-              <Picker.Item key={key} label={LANGUAGES.get(key)} value={key} />
-            ))
-        }
-      </Picker>
-      <Text style={styles.title}>Large Language model:</Text>
-      <Picker
-        selectedValue={selectedLLM}
-        onValueChange={onSelectLLM}>
-        <Picker.Item key={0} label='OpenAI' value='OpenAI' />
-        <Picker.Item key={1} label='BE' value='BE' />
-      </Picker>
-      <TouchableOpacity onPress={onTestSound}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-          <Text style={{ fontSize: 16 }}>Test sound</Text>
-          <Feather name="speaker" size={24} color={Colors.grey} />
-        </View>
-      </TouchableOpacity>
-
+      <Text style={styles.title}>Select language</Text>
+      <FlatList
+        data={Array.from(LANGUAGES.keys())}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={[
+              styles.option,
+              selectedLanguage === item && styles.selectedOption,
+            ]}
+            onPress={() => onLanguageChange(item)}
+          >
+            <Text style={styles.optionText}>{LANGUAGES.get(item)}</Text>
+          </TouchableOpacity>
+        )}
+      />
+      <View style={styles.versionContainer}>
+        <Text style={styles.versionText}>{version}</Text>
+      </View>
     </View>
-  )
-}
+  );
+};
 
-export default Settings
+export default Settings;

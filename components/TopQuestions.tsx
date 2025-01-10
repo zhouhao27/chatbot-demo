@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, TouchableHighlight, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import Colors from '@/constants/Colors';
 
@@ -11,22 +11,28 @@ const PredefinedMessages = [
 
 type MessageIdeasProps = {
   onMessageSelect: (message: string) => void;
-
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.input,
-    padding: 16,
-    borderRadius: 10,
+    backgroundColor: '#F8FAFC',
+    borderColor: 'lightblue', // Set border color to light blue
+    borderWidth: 1,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    // marginVertical: 8,
+    alignSelf: 'center', // Center align the items
+    justifyContent: 'center',
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
   },
   text: {
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.grey,
+    textAlign: 'center', // Center align the text
   },
 });
 
@@ -39,7 +45,8 @@ const TopQuestions = ({ onMessageSelect }: MessageIdeasProps) => {
         contentContainerStyle={{
           paddingHorizontal: 16,
           paddingVertical: 10,
-          gap: 16,
+          gap: 12,
+          alignItems: 'center', // Center align the items
         }}
       >
         {PredefinedMessages.map((message, index) => (
@@ -48,13 +55,12 @@ const TopQuestions = ({ onMessageSelect }: MessageIdeasProps) => {
             style={styles.container}
             onPress={() => onMessageSelect(`${message.text}`)}
           >
-            {/* <Text style={styles.title}>{message.title}</Text> */}
             <Text style={styles.text}>{message.text}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
     </View>
-  )
-}
+  );
+};
 
-export default TopQuestions
+export default TopQuestions;

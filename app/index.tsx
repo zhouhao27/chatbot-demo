@@ -4,9 +4,8 @@ import MessageInput from "@/components/MessageInput";
 import { Message, Role } from "@/models";
 import { FlashList } from "@shopify/flash-list";
 import { useEffect, useRef, useState } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet, View, Image, Text } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-// import Tts from 'react-native-tts';
+import { KeyboardAvoidingView, Platform, StyleSheet, View, Image, Text, Animated, ToastAndroid, Alert, Dimensions } from "react-native";
+import { GestureHandlerRootView, TouchableOpacity } from "react-native-gesture-handler";
 import Config from "react-native-config";
 import { tts } from "@/tts";
 import { convertToText, startRecording, stopRecording } from "@/stt";
@@ -15,6 +14,7 @@ import { LANGUAGES } from "@/constants";
 import { Link, useFocusEffect } from "expo-router";
 import { chat } from "@/chatgpt/api";
 import TopQuestions from "@/components/TopQuestions";
+import WelcomeMessage from "@/components/WelcomeMessage";
 import React from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Colors } from "react-native/Libraries/NewAppScreen";
@@ -49,8 +49,70 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'blue',
     textDecorationLine: 'underline'
-  }
-
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#006eab',
+    padding: 16,
+  },
+  title: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  drawer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: Dimensions.get('window').width,
+    height: '100%',
+    backgroundColor: '#ffffff',
+    elevation: 5,
+    zIndex: 10,
+  },
+  drawerContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  drawerHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  languageOption: {
+    paddingVertical: 10,
+  },
+  languageText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  selectedLanguage: {
+    color: '#6200ee',
+    fontWeight: 'bold',
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    padding: 16,
+  },
+  notification: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 20,
+  },
+  languageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 8,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 20,
+    marginVertical: 10,
+    alignSelf: 'center',
+  },
 });
 
 export default function Index() {
@@ -61,6 +123,10 @@ export default function Index() {
   const [session, setSession] = useState<string | undefined>(undefined);
   const isReplayRunning = useRef(false);
   const [isQuerying, setIsQuerying] = useState(false);
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const slideAnim = useState(new Animated.Value(Dimensions.get('window').width))[0];
+  const [selectedLanguage, setSelectedLanguage] = useState('en-US');
 
   const getCompletion = async (message: string) => {
     console.log('getCompletion:', message)
@@ -189,6 +255,42 @@ export default function Index() {
     setMessages([]);
   };
 
+  const toggleDrawer = () => {
+    if (isDrawerOpen) {
+      Animated.timing(slideAnim, {
+        toValue: Dimensions.get('window').width,
+        duration: 300,
+        useNativeDriver: false,
+      }).start(() => setIsDrawerOpen(false));
+    } else {
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start(() => setIsDrawerOpen(true));
+    }
+  };
+
+  const notifyLanguageChange = (language: string) => {
+    setSelectedLanguage(language);
+    const message = `Selected language is ${language}`;
+    if (Platform.OS === 'android') {
+      ToastAndroid.show(message, ToastAndroid.SHORT);
+    } else {
+      Alert.alert('Notification', message);
+    }
+    toggleDrawer(); // Close drawer after selection
+  };
+
+  useFocusEffect(() => {
+    getLanguageCode().then((languageCode) => {
+      if (LANGUAGES.has(languageCode ?? 'en-US')) {
+        setLanguage(LANGUAGES.get(languageCode ?? 'en-US')!);
+      }
+    });
+  });
+
+
   return (
     <GestureHandlerRootView>
       <View style={styles.container}>
@@ -197,21 +299,10 @@ export default function Index() {
             flex: 1,
           }}
         >
-          {
-            messages.length === 0 && (
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={styles.prompt}>{`Current language is ${language}. Please use this language to ask questions.`}</Text>
-                <Link style={{ paddingHorizontal: 8 }} href="/settings"><FontAwesome5 name="cog" size={24} color={Colors.grey} /></Link>
-              </View>
-            )
-          }
-          {/* {messages.length === 0 && (
-            <View style={styles.logoContainer}>
-              <Image
-                source={require('../assets/images/react-logo.png')}
-                style={styles.image} />
-            </View>
-          )} */}
+          {messages.length === 0 && <View style={styles.languageContainer}>
+            <FontAwesome5 name="globe" size={16} color="#333" />
+            <Text style={styles.languageText}>{`Selected Language: ${language}`}</Text>
+          </View>}
           <FlashList
             ref={flashListRef}
             data={messages}
@@ -234,6 +325,7 @@ export default function Index() {
           }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
+          {messages.length === 0 && <WelcomeMessage />}
           {messages.length === 0 && <TopQuestions onMessageSelect={getCompletion} />}
           <MessageInput onShouldSendMessage={getCompletion} onStartRecording={startRecord} onStopRecording={stopRecord} onNewSession={startNewSession} isQuerying={isQuerying} />
         </KeyboardAvoidingView>

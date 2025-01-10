@@ -96,6 +96,6 @@ export interface Output {
 
 export interface ChatRequestBody {
   language: string;
-  conversation_id?: string;
   messages: Message[];
+  conversation_id?: string;
 }

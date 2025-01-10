@@ -32,15 +32,27 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 10,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 20,
-    padding: 10,
-    borderColor: Colors.greyLight,
-    backgroundColor: Colors.light
+    borderRadius: 30,
+    padding: 15,
+    borderColor: '#c8d6e3',
+    backgroundColor: Colors.light,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2
   },
   buttonView: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12
+  },
+  sendButton: {
+    width: 35,
+    height: 35,
+    borderRadius: 20,
+    backgroundColor: '#c7d0d8',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 
@@ -69,10 +81,10 @@ const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording, 
     }
   }
   return (
-    <View style={{ paddingBottom: bottom + 10, paddingTop: 10, backgroundColor: Colors.light }}>
+    <View style={{ paddingBottom: bottom - 10, paddingTop: 20, marginTop: 20, backgroundColor: Colors.light }}>
       <View style={styles.row}>
-        <TouchableOpacity onPress={onNewSession}>
-          <Feather name="plus" size={24} color={Colors.grey} />
+        <TouchableOpacity onPress={onNewSession} style={styles.sendButton}>
+          <Feather name="plus" size={24} color={Colors.white} />
         </TouchableOpacity>
         <TextInput
           autoFocus
@@ -83,15 +95,15 @@ const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording, 
           onChangeText={onChangeText}
         />
         {message.length > 0 && !isQuerying ? (
-          <TouchableOpacity onPress={onSend}>
-            <Ionicons name="arrow-up-circle-outline" size={24} color={Colors.grey} />
+          <TouchableOpacity onPress={onSend} style={styles.sendButton}>
+            <Ionicons name="arrow-up-circle-outline" size={24} color={Colors.white} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={onHandleRecording}>
             {
               !isQuerying && (
                 isRecording ? <MaterialCommunityIcons name="record-circle-outline" size={24} color="red" /> :
-                  <FontAwesome5 name="microphone" size={24} color={Colors.grey} />
+                  <FontAwesome5 name="microphone" size={24} color={'#6482AD'} />
               )
             }
           </TouchableOpacity>
