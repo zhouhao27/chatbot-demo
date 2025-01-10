@@ -11,7 +11,7 @@ import Config from "react-native-config";
 import { tts } from "@/tts";
 import { convertToText, startRecording, stopRecording } from "@/stt";
 import { getLanguageCode, getLLM } from "@/storage";
-import { LANGUAGES } from "@/constants/Config";
+import { LANGUAGES } from "@/constants";
 import { Link, useFocusEffect } from "expo-router";
 import { chat } from "@/chatgpt/api";
 import TopQuestions from "@/components/TopQuestions";
@@ -140,9 +140,7 @@ export default function Index() {
 
   const onReplay = async (content: string) => {
 
-    tts(content, () => {
-      console.log('TTS done')
-    })
+    tts(content);
 
     // if (isReplayRunning.current) {
     //   return;

@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Picker } from '@react-native-picker/picker';
-import { LANGUAGES } from '@/constants/Config';
+import { LANGUAGES } from '@/constants';
 import { getLanguageCode, getLLM, setLanguageCode, setLLM } from '@/storage';
 import { Feather } from '@expo/vector-icons';
 import { Colors } from 'react-native/Libraries/NewAppScreen';

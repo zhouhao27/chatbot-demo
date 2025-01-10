@@ -1,7 +1,7 @@
 import axios from "axios";
 import fs from "react-native-fs";
 import Config from "react-native-config";
-import { GOOGLE_SPEECH_API_URL } from "@/constants/Config";
+import { GOOGLE_SPEECH_API_URL } from "@/constants";
 import AudioRecord from "react-native-audio-record";
 import { getLanguageCode } from "@/storage";
 import { PermissionsAndroid, Platform } from "react-native";
