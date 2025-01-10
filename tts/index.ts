@@ -12,7 +12,6 @@ export const tts = async (text: string) => {
 
   try {
     // Step 1: Call Google TTS API
-    console.log('key:',Config.GOOGLE_API_KEY)
     const response = await axios.post(
       `${GOOGLE_TTS_API_URL}?key=${Config.GOOGLE_API_KEY}`,
       {
@@ -56,4 +55,3 @@ export const playSound = async (filePath: string) => {
     SoundManager.getInstance().playSound(sound);
   });
 };
-

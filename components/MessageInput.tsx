@@ -11,6 +11,7 @@ export type MessageInputProps = {
   onStartRecording: () => void;
   onStopRecording: () => void;
   onNewSession: () => void;
+  isQuerying: boolean;
 };
 
 const styles = StyleSheet.create({
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording, onNewSession }: MessageInputProps) => {
+const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording, onNewSession, isQuerying }: MessageInputProps) => {
   const [message, setMessage] = useState("");
   const { bottom } = useSafeAreaInsets();
   const [isRecording, setIsRecording] = useState(false);
@@ -67,7 +68,6 @@ const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording, 
       onStartRecording()
     }
   }
-
   return (
     <View style={{ paddingBottom: bottom + 10, paddingTop: 10, backgroundColor: Colors.light }}>
       <View style={styles.row}>
@@ -82,17 +82,18 @@ const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording, 
           value={message}
           onChangeText={onChangeText}
         />
-        {message.length > 0 ? (
+        {message.length > 0 && !isQuerying ? (
           <TouchableOpacity onPress={onSend}>
             <Ionicons name="arrow-up-circle-outline" size={24} color={Colors.grey} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={onHandleRecording}>
             {
-              isRecording ? <MaterialCommunityIcons name="record-circle-outline" size={24} color="red" /> :
-                <FontAwesome5 name="microphone" size={24} color={Colors.grey} />
+              !isQuerying && (
+                isRecording ? <MaterialCommunityIcons name="record-circle-outline" size={24} color="red" /> :
+                  <FontAwesome5 name="microphone" size={24} color={Colors.grey} />
+              )
             }
-
           </TouchableOpacity>
         )}
       </View>

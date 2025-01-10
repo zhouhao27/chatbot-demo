@@ -15,6 +15,9 @@ import { LANGUAGES } from "@/constants";
 import { Link, useFocusEffect } from "expo-router";
 import { chat } from "@/chatgpt/api";
 import TopQuestions from "@/components/TopQuestions";
+import React from "react";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const styles = StyleSheet.create({
   container: {
@@ -57,6 +60,7 @@ export default function Index() {
   const [engine, setEngine] = useState<string>('OpenAI');
   const [session, setSession] = useState<string | undefined>(undefined);
   const isReplayRunning = useRef(false);
+  const [isQuerying, setIsQuerying] = useState(false);
 
   const getCompletion = async (message: string) => {
     console.log('getCompletion:', message)
@@ -98,6 +102,7 @@ export default function Index() {
       }
 
       // call chatgpt api
+      setIsQuerying(true);
       await postDataStream(
         Config.OPENAI_URL!,
         'gpt-3.5-turbo',
@@ -105,12 +110,15 @@ export default function Index() {
         message,
         updateRecievedMessage
       );
+      setIsQuerying(false);
     } else {
       // method 2: Call BE API    
       // TODO: 
       // 1. session (history) implementation
       // 2. tools in message
+      setIsQuerying(true);
       const response = await chat(message, session);
+      setIsQuerying(false);
       const id = response.id;
       setSession(id);
       const newMessage = response.choices[0].messages[0].content;
@@ -189,8 +197,14 @@ export default function Index() {
             flex: 1,
           }}
         >
-          <Text style={styles.prompt}>{`Current language is ${language}. Please use this language to ask questions.`}</Text>
-          <Link href="/settings"><Text style={styles.link}>Settings</Text></Link>
+          {
+            messages.length === 0 && (
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={styles.prompt}>{`Current language is ${language}. Please use this language to ask questions.`}</Text>
+                <Link style={{ paddingHorizontal: 8 }} href="/settings"><FontAwesome5 name="cog" size={24} color={Colors.grey} /></Link>
+              </View>
+            )
+          }
           {/* {messages.length === 0 && (
             <View style={styles.logoContainer}>
               <Image
@@ -221,7 +235,7 @@ export default function Index() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           {messages.length === 0 && <TopQuestions onMessageSelect={getCompletion} />}
-          <MessageInput onShouldSendMessage={getCompletion} onStartRecording={startRecord} onStopRecording={stopRecord} onNewSession={startNewSession} />
+          <MessageInput onShouldSendMessage={getCompletion} onStartRecording={startRecord} onStopRecording={stopRecord} onNewSession={startNewSession} isQuerying={isQuerying} />
         </KeyboardAvoidingView>
       </View>
     </GestureHandlerRootView>
