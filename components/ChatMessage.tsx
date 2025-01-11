@@ -1,39 +1,51 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Message, Role } from '@/models'
 import { FontAwesome5 } from '@expo/vector-icons'
 import Colors from '@/constants/Colors'
 import { Flow } from 'react-native-animated-spinkit'
+import { getPlayState, setPlayState } from '@/storage'
+import SoundManager from '@/tts/SoundManager'
 
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingHorizontal: 16,
-    gap: 16,
+    gap: 10,
     marginVertical: 8,
   },
   avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    marginTop: 6,
   },
   item: {
     borderRadius: 10,
     overflow: 'hidden',
   },
   text: {
-    padding: 4,
+    paddingHorizontal: 4,
+    paddingVertical: 0,
     fontSize: 16,
     flexWrap: 'wrap',
     flex: 1,
+    color: '#00247B'
   },
   messageItemContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
-    paddingHorizontal: 16,
     flex: 1,
     marginVertical: 8,
+  },
+  botResponseText: {
+    paddingHorizontal: 4,
+    paddingVertical: 0,
+    fontSize: 16,
+    flexWrap: 'wrap',
+    flex: 1,
+    color: '#2D3642',
   }
 })
 
@@ -43,7 +55,35 @@ type ChatMessageProps = {
   onReplay: (content: string) => void;
 }
 
+
 const ChatMessage = ({ isPlaying, message, onReplay }: ChatMessageProps) => {
+
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+
+  useEffect(() => {
+    getPlayState().then((playState) => {
+      setIsAudioPlaying(playState);
+    });
+    // setPlayState(!isAudioPlaying)
+  }, [isAudioPlaying])
+  console.log("isAudioPlaying", isAudioPlaying)
+  const handlePress = () => {
+    const soundManager = SoundManager.getInstance();
+    if (isAudioPlaying) {
+      soundManager.stopSound(() => {
+        setPlayState(false);
+        setIsAudioPlaying(false);
+      });
+    } else {
+      setPlayState(true);
+      getPlayState().then((playState) => {
+        setIsAudioPlaying(playState);
+      });
+      onReplay(message.content);
+    }
+
+  };
+
   return (
     <View style={styles.row}>
       {message.role === Role.Bot ? (
@@ -61,11 +101,11 @@ const ChatMessage = ({ isPlaying, message, onReplay }: ChatMessageProps) => {
       )}
       <View style={styles.messageItemContainer} >
         {
-          message.content.length == 0 ? <Flow size={24} color={Colors.grey} /> : <Text style={styles.text}>{message.content}</Text>
+          message.content.length == 0 ? <Flow size={24} color={Colors.grey} style={{ marginTop: 4, marginLeft: 8 }} /> : <Text style={message.role === Role.Bot ? styles.botResponseText : styles.text}>{message.content}</Text>
         }
         {message.role === Role.Bot && message.content.length > 0 && (
-          <TouchableOpacity onPress={() => onReplay(message.content)} style={{ marginTop: 8 }}>
-            <FontAwesome5 name="headphones" size={24} color={Colors.greyLight} />
+          <TouchableOpacity onPress={handlePress} style={{ marginTop: 12 }}>
+            <FontAwesome5 name={isAudioPlaying ? 'stop-circle' : 'volume-up'} size={isAudioPlaying ? 24 : 20} color={'#A0ABB8'} />
           </TouchableOpacity>)}
       </View>
     </View >
