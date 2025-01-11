@@ -3,7 +3,7 @@ import Sound from "react-native-sound";
 import axios from "axios";
 import Config from "react-native-config";
 import { GOOGLE_TTS_API_URL } from "@/constants";
-import { getLanguageCode } from "@/storage";
+import { getLanguageCode, setPlayState } from "@/storage";
 import { Alert } from "react-native";
 import SoundManager from "./SoundManager";
 
@@ -44,6 +44,7 @@ export const playSound = async (filePath: string, p0: () => void) => {
       return;
     }
     console.log("Sound loaded successfully");
+    setPlayState(true);
     // sound.play((success) => {
     //   if (success) {
     //     console.log("Successfully played audio");

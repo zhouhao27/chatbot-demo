@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   headerTitleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-
+    marginTop: 10,
   },
   headerTitle: {
     color: 'white',
@@ -46,6 +46,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f9fa', // Apply the rest of the bottom color
   },
+  subtitle: {
+    fontSize: 14,
+    color: '#ffb74d',
+    marginLeft: 10,
+  },
+  headerIconContainer: {
+    padding: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#005787',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 export default function RootLayout() {
@@ -74,11 +88,16 @@ export default function RootLayout() {
       <SafeAreaView style={styles.headerContainer}>
         <View style={styles.header}>
           <View style={styles.headerTitleContainer}>
-            <MaterialCommunityIcons name="robot" size={30} color="white" />
-            <Text style={styles.headerTitle}>AI Chat Bot</Text>
+            <View style={styles.headerIconContainer}>
+              <MaterialCommunityIcons name="robot" size={24} color="white" />
+            </View>
+            <View>
+              <Text style={styles.headerTitle}>TTM Chat Bot</Text>
+              <Text style={styles.subtitle}>Your AI-Powered Bot</Text>
+            </View>
           </View>
           <TouchableOpacity onPress={toggleSettings}>
-            <FontAwesome5 name="bars" size={24} color="white" />
+            <FontAwesome5 name="bars" size={24} color="#E1F0FF" />
           </TouchableOpacity>
         </View>
       </SafeAreaView>

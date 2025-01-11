@@ -5,19 +5,18 @@ import { Message, Role } from "@/models";
 import { FlashList } from "@shopify/flash-list";
 import { useEffect, useRef, useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet, View, Image, Text, Animated, ToastAndroid, Alert, Dimensions } from "react-native";
-import { GestureHandlerRootView, TouchableOpacity } from "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Config from "react-native-config";
 import { tts } from "@/tts";
 import { convertToText, startRecording, stopRecording } from "@/stt";
 import { getLanguageCode, getLLM } from "@/storage";
 import { LANGUAGES } from "@/constants";
-import { Link, useFocusEffect } from "expo-router";
+import { useFocusEffect } from "expo-router";
 import { chat } from "@/chatgpt/api";
 import TopQuestions from "@/components/TopQuestions";
 import WelcomeMessage from "@/components/WelcomeMessage";
 import React from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const styles = StyleSheet.create({
   container: {
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   selectedLanguage: {
-    color: '#6200ee',
+    color: '#006eab',
     fontWeight: 'bold',
   },
   content: {
@@ -112,6 +111,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginVertical: 10,
     alignSelf: 'center',
+  },
+  highlightedLanguage: {
+    color: '#006eab',
+    fontWeight: 'bold',
+  },
+  globeIcon: {
+    marginRight: 8,
   },
 });
 
@@ -203,9 +209,15 @@ export default function Index() {
 
   useFocusEffect(() => {
     getLanguageCode().then((languageCode) => {
-      if (LANGUAGES.has(languageCode ?? 'en-US')) {
-        setLanguage(LANGUAGES.get(languageCode ?? 'en-US')!);
+      const selectedLanguage = LANGUAGES.find((lang) => lang.id === languageCode);
+      if (selectedLanguage) {
+        setLanguage(selectedLanguage.label);
+      } else {
+        setLanguage('English');
       }
+      /* if (LANGUAGES.has(languageCode ?? 'en-US')) {
+        setLanguage(LANGUAGES.get(languageCode ?? 'en-US')!);
+      } */
     });
     getLLM().then((llm) => {
       setEngine(llm ?? 'OpenAI');
@@ -271,22 +283,17 @@ export default function Index() {
     }
   };
 
-  const notifyLanguageChange = (language: string) => {
-    setSelectedLanguage(language);
-    const message = `Selected language is ${language}`;
-    if (Platform.OS === 'android') {
-      ToastAndroid.show(message, ToastAndroid.SHORT);
-    } else {
-      Alert.alert('Notification', message);
-    }
-    toggleDrawer(); // Close drawer after selection
-  };
-
   useFocusEffect(() => {
     getLanguageCode().then((languageCode) => {
-      if (LANGUAGES.has(languageCode ?? 'en-US')) {
-        setLanguage(LANGUAGES.get(languageCode ?? 'en-US')!);
+      const selectedLanguage = LANGUAGES.find((lang) => lang.id === languageCode);
+      console.log('selectedLanguage:', selectedLanguage)
+      if (selectedLanguage) {
+        setSelectedLanguage(selectedLanguage.label);
+      } else {
+        setSelectedLanguage('English');
       }
+      /* 
+       */
     });
   });
 
@@ -300,8 +307,8 @@ export default function Index() {
           }}
         >
           {messages.length === 0 && <View style={styles.languageContainer}>
-            <FontAwesome5 name="globe" size={16} color="#333" />
-            <Text style={styles.languageText}>{`Selected Language: ${language}`}</Text>
+            <FontAwesome5 name="globe" size={16} color="#333" style={styles.globeIcon} />
+            <Text style={styles.languageText}>Selected Language: <Text style={styles.highlightedLanguage}>{language}</Text></Text>
           </View>}
           <FlashList
             ref={flashListRef}
@@ -326,7 +333,7 @@ export default function Index() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           {messages.length === 0 && <WelcomeMessage />}
-          {messages.length === 0 && <TopQuestions onMessageSelect={getCompletion} />}
+          {messages.length === 0 && <TopQuestions onMessageSelect={getCompletion} selectedLanguage={selectedLanguage} />}
           <MessageInput onShouldSendMessage={getCompletion} onStartRecording={startRecord} onStopRecording={stopRecord} onNewSession={startNewSession} isQuerying={isQuerying} />
         </KeyboardAvoidingView>
       </View>
