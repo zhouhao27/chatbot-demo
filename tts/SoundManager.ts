@@ -1,3 +1,4 @@
+import { setPlayState } from "@/storage";
 import Sound from "react-native-sound";
 
 class SoundManager {
@@ -27,6 +28,7 @@ class SoundManager {
 
       sound.play((success) => {
         if (success) {
+          setPlayState(false);
           console.log("Sound finished playing");
         } else {
           console.log("Sound playback failed");
