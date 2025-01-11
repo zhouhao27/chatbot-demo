@@ -3,11 +3,19 @@ export const GOOGLE_SPEECH_API_URL =
 export const GOOGLE_TTS_API_URL =
   "https://texttospeech.googleapis.com/v1/text:synthesize";
 
-export const LANGUAGES: Map<string, string> = new Map([
+/* export const LANGUAGES: Map<string, string> = new Map([
   ["en-US", "English"],
-  ["zh-CN", "Chinese"],
+  ["zh-CN", "Mandarin"],
   ["bn-IN", "Bengali"],
   ["ta-IN", "Tamil"],
   ["th-TH", "Thai"],
   ["vi-VN", "Vietnamese"],
-]);
+]); */
+export const LANGUAGES = [
+  { id: "en-US", value: "English", label: "English" },
+  { id: "zh-CN", value: "Mandarin", label: "Mandarin / 中文" },
+  { id: "bn-IN", value: "Bengali", label: "Bengali / বাংলা" },
+  { id: "ta-IN", value: "Tamil", label: "Tamil / தமிழ்" },
+  { id: "th-TH", value: "Thai", label: "Thai / ไทย" },
+  { id: "vi-VN", value: "Vietnamese", label: "Vietnamese / Tiếng Việt" },
+];
