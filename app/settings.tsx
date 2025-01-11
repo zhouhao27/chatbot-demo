@@ -1,9 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { LANGUAGES } from '@/constants';
-import { getLanguageCode, getLLM, setLanguageCode, setLLM } from '@/storage';
-import { Feather } from '@expo/vector-icons';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { getLanguageCode, setLanguageCode } from '@/storage';
 import { playSound } from '@/tts';
 import { Asset } from 'expo-asset';
 import DeviceInfo from 'react-native-device-info';
@@ -65,19 +63,18 @@ const styles = StyleSheet.create({
 
 const Settings = ({ toggleSettings }: { toggleSettings: () => void }) => {
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
-  const [selectedLLM, setSelectedLLM] = useState('BE');
+  // const [selectedLLM, setSelectedLLM] = useState('BE');
   const [version, setVersion] = useState('');
 
   const onLanguageChange = (language: string) => {
     setLanguageCode(language);
     setSelectedLanguage(language);
-    // toggleSettings(); // Call toggleSettings to hide the settings screen
   };
 
-  const onSelectLLM = (llm: string) => {
+  /* const onSelectLLM = (llm: string) => {
     setLLM(llm);
     setSelectedLLM(llm);
-  };
+  }; */
 
   const onTestSound = async () => {
     const soundFile = Asset.fromModule(require('../assets/sounds/test.mp3'));
@@ -96,9 +93,9 @@ const Settings = ({ toggleSettings }: { toggleSettings: () => void }) => {
     getLanguageCode().then((languageCode) => {
       setSelectedLanguage(languageCode || 'en-US');
     });
-    getLLM().then((llm) => {
+    /* getLLM().then((llm) => {
       setSelectedLLM(llm || 'OpenAI');
-    });
+    }); */
     getVersion();
   }, []);
 
@@ -106,17 +103,17 @@ const Settings = ({ toggleSettings }: { toggleSettings: () => void }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Select language</Text>
       <FlatList
-        data={Array.from(LANGUAGES.keys())}
-        keyExtractor={(item) => item}
+        data={LANGUAGES}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={[
               styles.option,
-              selectedLanguage === item && styles.selectedOption,
+              selectedLanguage === item.id && styles.selectedOption,
             ]}
-            onPress={() => onLanguageChange(item)}
+            onPress={() => onLanguageChange(item.id)}
           >
-            <Text style={styles.optionText}>{LANGUAGES.get(item)}</Text>
+            <Text style={styles.optionText}>{(item.label)}</Text>
           </TouchableOpacity>
         )}
       />
