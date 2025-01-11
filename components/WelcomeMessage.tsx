@@ -8,22 +8,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     title: {
-        fontSize: 26,
+        fontSize: 22,
         fontWeight: 'bold',
         color: '#2563CC',
-    },
-    subtitle: {
-        fontSize: 14,
-        color: '#ff8b00',
-        marginTop: 8,
     },
 });
 
 const WelcomeMessage = () => {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>How can I help you?</Text>
-            <Text style={styles.subtitle}>Your AI-Powered Chat Bot</Text>
+            <Text style={styles.title}>Frequently Asked Questions</Text>
         </View>
     );
 };
