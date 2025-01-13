@@ -50,3 +50,20 @@ export const getPlayState = async () => {
     return false;
   }
 };
+
+export const setHasSettingsScreen = async (hasSettingsScreen: boolean) => {
+  try {
+    await AsyncStorage.setItem("has-settings-screen", String(hasSettingsScreen));
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const getHasSettingsScreen = async () => {
+  try {
+    const value = await AsyncStorage.getItem("has-settings-screen");
+    return value === "true";
+  } catch (e) {
+    return false;
+  }
+};

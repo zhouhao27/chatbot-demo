@@ -1,17 +1,17 @@
-import Colors from "@/constants/Colors";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, Stack } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { useSharedValue, withTiming } from 'react-native-reanimated';
+import { getHasSettingsScreen, setHasSettingsScreen } from "@/storage";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   headerContainer: {
-    backgroundColor: '#006eab', // Apply header color to the top area
+    backgroundColor: '#006eab',
   },
   header: {
     flexDirection: 'row',
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    backgroundColor: '#f8f9fa', // Apply the rest of the bottom color
+    backgroundColor: '#f8f9fa',
   },
   subtitle: {
     fontSize: 14,
@@ -67,21 +67,32 @@ export default function RootLayout() {
 
   const translateX = useSharedValue(0);
 
+  useEffect(() => {
+    const fetchSettingsState = async () => {
+      const hasSettingsScreen = await getHasSettingsScreen();
+      setIsSettingsOpen(hasSettingsScreen);
+      translateX.value = hasSettingsScreen ? -300 : 0;
+    };
+
+    fetchSettingsState();
+  }, [getHasSettingsScreen]);
+
   const toggleSettings = () => {
-    setIsSettingsOpen(!isSettingsOpen);
+    const newState = !isSettingsOpen;
+    setIsSettingsOpen(newState);
     translateX.value = withTiming(isSettingsOpen ? 0 : -300, { duration: 300 });
+    setHasSettingsScreen(newState);
     if (!isSettingsOpen) {
       router.push('/settings');
     } else {
-      router.back();
+      if (router.canGoBack()) {
+        router.back();
+      } else {
+        router.push('/settings');
+      }
     }
   };
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: translateX.value }],
-    };
-  });
+  console.log("isSettingsOpen", isSettingsOpen)
 
   return (
     <View style={styles.container}>
@@ -92,8 +103,8 @@ export default function RootLayout() {
               <MaterialCommunityIcons name="robot" size={24} color="white" />
             </View>
             <View>
-              <Text style={styles.headerTitle}>TTM Chat Bot</Text>
-              <Text style={styles.subtitle}>Your AI-Powered Bot</Text>
+              <Text style={styles.headerTitle}>TTM Chatbot</Text>
+              <Text style={styles.subtitle}>Your AI-Powered Assistant</Text>
             </View>
           </View>
           <TouchableOpacity onPress={toggleSettings}>

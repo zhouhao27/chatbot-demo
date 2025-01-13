@@ -1,10 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { LANGUAGES } from '@/constants';
-import { getLanguageCode, setLanguageCode } from '@/storage';
+import { getLanguageCode, setHasSettingsScreen, setLanguageCode } from '@/storage';
 import { playSound } from '@/tts';
 import { Asset } from 'expo-asset';
 import DeviceInfo from 'react-native-device-info';
+import { router } from 'expo-router';
 
 const styles = StyleSheet.create({
   container: {
@@ -61,28 +62,25 @@ const styles = StyleSheet.create({
   },
 });
 
-const Settings = ({ toggleSettings }: { toggleSettings: () => void }) => {
+const Settings = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
-  // const [selectedLLM, setSelectedLLM] = useState('BE');
   const [version, setVersion] = useState('');
+  // const [isSettingsOpen] = useState(false);
 
   const onLanguageChange = (language: string) => {
     setLanguageCode(language);
     setSelectedLanguage(language);
+    setHasSettingsScreen(false);
+    router.back();
   };
 
-  /* const onSelectLLM = (llm: string) => {
-    setLLM(llm);
-    setSelectedLLM(llm);
-  }; */
-
-  const onTestSound = async () => {
-    const soundFile = Asset.fromModule(require('../assets/sounds/test.mp3'));
-    await soundFile.downloadAsync();
-    if (soundFile.localUri) {
-      playSound(soundFile.localUri, () => { });
-    }
-  };
+  /*  const onTestSound = async () => {
+     const soundFile = Asset.fromModule(require('../assets/sounds/test.mp3'));
+     await soundFile.downloadAsync();
+     if (soundFile.localUri) {
+       playSound(soundFile.localUri, () => { });
+     }
+   }; */
 
   const getVersion = async () => {
     const readableVersion = DeviceInfo.getReadableVersion();
@@ -93,9 +91,6 @@ const Settings = ({ toggleSettings }: { toggleSettings: () => void }) => {
     getLanguageCode().then((languageCode) => {
       setSelectedLanguage(languageCode || 'en-US');
     });
-    /* getLLM().then((llm) => {
-      setSelectedLLM(llm || 'OpenAI');
-    }); */
     getVersion();
   }, []);
 

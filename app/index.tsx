@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   languageText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
   },
   selectedLanguage: {
