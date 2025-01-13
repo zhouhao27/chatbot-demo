@@ -298,6 +298,11 @@ export default function Index() {
   });
 
 
+  const screenHeight = Dimensions.get('window').height;
+  const keyboardVerticalOffset = Platform.OS === 'ios' ? 180 : screenHeight * 0.1;
+
+
+
   return (
     <GestureHandlerRootView>
       <View style={styles.container}>
@@ -306,10 +311,11 @@ export default function Index() {
             flex: 1,
           }}
         >
-          {messages.length === 0 && <View style={styles.languageContainer}>
-            <FontAwesome5 name="globe" size={16} color="#333" style={styles.globeIcon} />
-            <Text style={styles.languageText}>Selected Language: <Text style={styles.highlightedLanguage}>{language}</Text></Text>
-          </View>}
+          {messages.length === 0 &&
+            <View style={styles.languageContainer}>
+              <FontAwesome5 name="globe" size={16} color="#333" style={styles.globeIcon} />
+              <Text style={styles.languageText}>Selected Language: <Text style={styles.highlightedLanguage}>{language}</Text></Text>
+            </View>}
           <FlashList
             ref={flashListRef}
             data={messages}
@@ -323,7 +329,7 @@ export default function Index() {
           />
         </View>
         <KeyboardAvoidingView
-          keyboardVerticalOffset={70}
+          keyboardVerticalOffset={keyboardVerticalOffset}
           style={{
             position: 'absolute',
             bottom: 0,

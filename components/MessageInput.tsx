@@ -1,7 +1,7 @@
 import Colors from "@/constants/Colors";
 import { Feather, FontAwesome5, Foundation, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Platform } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -36,10 +36,18 @@ const styles = StyleSheet.create({
     padding: 15,
     borderColor: '#c8d6e3',
     backgroundColor: Colors.light,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 0,
+        borderWidth: 1,
+      },
+    }),
   },
   buttonView: {
     flexDirection: 'row',
@@ -81,7 +89,7 @@ const MessageInput = ({ onShouldSendMessage, onStartRecording, onStopRecording, 
     }
   }
   return (
-    <View style={{ paddingBottom: bottom - 10, paddingTop: 20, marginTop: 20, backgroundColor: Colors.light }}>
+    <View style={{ paddingBottom: bottom - 20, paddingTop: 20, marginTop: 20, backgroundColor: Colors.light }}>
       <View style={styles.row}>
         <TouchableOpacity onPress={onNewSession} style={styles.sendButton}>
           <Feather name="plus" size={24} color={Colors.white} />

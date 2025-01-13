@@ -6,6 +6,8 @@ const styles = StyleSheet.create({
         padding: 16,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: '#f0f0f0',
+        paddingVertical: 20
     },
     title: {
         fontSize: 22,
