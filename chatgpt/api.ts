@@ -67,10 +67,10 @@ export const chat = async (
   conversation_id?: string | undefined
 ) => {
   const lang = await getLanguageCode();
-  // TODO: map to the correct language code
+  const langCode = lang?.toLowerCase() === "zh-cn" ? "zh" : "en"; // TODO: currently only support zh and en. Need to map to the correct language code if other language is supported
 
   const request: ChatRequestBody = {
-    language: lang || "en",
+    language: langCode,
     conversation_id,
     messages: [
       // {
