@@ -37,14 +37,13 @@ export const tts = async (text: string) => {
 };
 
 export const playSound = async (filePath: string, onComplete?: () => void) => {
-  console.log("playSound:", filePath);
   Sound.setCategory("Playback", true);
   const sound = new Sound(filePath, "", (error) => {
     if (error) {
       Alert.alert("Error", "Failed to load the sound");
       return;
     }
-    console.log("Sound loaded successfully");
+    console.log("Sound loaded successfully at:", filePath);
     setPlayState(true);
     // sound.play((success) => {
     //   if (success) {
@@ -54,6 +53,6 @@ export const playSound = async (filePath: string, onComplete?: () => void) => {
     //   }
     //   // onComplete();
     // });
-    SoundManager.getInstance().playSound(sound);
+    SoundManager.getInstance().playSound(sound, onComplete);
   });
 };

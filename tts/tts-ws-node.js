@@ -34,7 +34,7 @@ const config = {
 }
 
 export default async function starttts(content, callback) {
-    console.log('starttts:', content);
+    console.log('starttts callback:', callback);
 
     onMessageCallback = callback
     // 获取当前时间 RFC1123格式
@@ -81,7 +81,9 @@ export default async function starttts(content, callback) {
         console.log('connect close!' + e.code, e.reason);
         console.log('outPutFilePath:', outPutFilePath);
         playSound(outPutFilePath, () => {
-            console.log('playSound end');
+            if (onMessageCallback) {
+                onMessageCallback("playSound end")
+            }
         });
     };
 

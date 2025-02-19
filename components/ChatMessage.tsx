@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 type ChatMessageProps = {
   isPlaying: boolean;
   message: Message;
-  onReplay: (content: string) => void;
+  onReplay: (content: string, onComplete?: () => void) => void;
 }
 
 
@@ -79,7 +79,9 @@ const ChatMessage = ({ isPlaying, message, onReplay }: ChatMessageProps) => {
       getPlayState().then((playState) => {
         setIsAudioPlaying(playState);
       });
-      onReplay(message.content);
+      onReplay(message.content, () => {
+        setIsAudioPlaying(false);
+      });
     }
 
   };

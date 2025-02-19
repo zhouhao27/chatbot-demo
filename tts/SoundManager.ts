@@ -22,7 +22,7 @@ class SoundManager {
    * Plays a sound. Stops any currently playing sound.
    * @param sound - An instance of the Sound object to play.
    */
-  public async playSound(sound: Sound) {
+  public async playSound(sound: Sound, onComplete?: () => void) {
     this.stopSound(() => {
       this.currentPlayingSound = sound;
 
@@ -32,6 +32,9 @@ class SoundManager {
           console.log("Sound finished playing");
         } else {
           console.log("Sound playback failed");
+        }
+        if (onComplete) {
+          onComplete();
         }
         this.currentPlayingSound = null; // Reset the currently playing sound
         sound.release(); // Release the sound object

@@ -224,11 +224,15 @@ export default function Index() {
     });
   });
 
-  const onReplay = async (content: string) => {
+  // TODO: Actually using a store is simplier solution. But here I'm using the callback. Will change later if needed.
+  const onReplay = async (content: string, onComplete?: () => void) => {
 
     // tts(content);
     starttts(content, (msg: string) => {
-      console.log('tts content:', content)
+      console.log('tts complete:', msg)
+      if (onComplete) {
+        onComplete();
+      }
     });
 
     // if (isReplayRunning.current) {
