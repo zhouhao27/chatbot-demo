@@ -230,7 +230,7 @@ export default function Index() {
   const onReplay = async (content: string, onComplete?: () => void) => {
 
     // tts(content);
-    starttts(content, (msg: string) => {
+    starttts(content, language, (msg: string) => {
       console.log('tts complete:', msg)
       if (onComplete) {
         onComplete();

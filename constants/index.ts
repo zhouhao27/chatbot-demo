@@ -28,10 +28,30 @@ export const apiKey = "07b5abadd308a3f6490da1b70fa1d41a";
   ["vi-VN", "Vietnamese"],
 ]); */
 export const LANGUAGES = [
-  { id: "en-US", value: "English", label: "English" },
-  { id: "zh-CN", value: "Mandarin", label: "Mandarin / 中文" },
-  { id: "bn-IN", value: "Bengali", label: "Bengali / বাংলা" },
-  { id: "ta-IN", value: "Tamil", label: "Tamil / தமிழ்" },
-  { id: "th-TH", value: "Thai", label: "Thai / ไทย" },
-  { id: "vi-VN", value: "Vietnamese", label: "Vietnamese / Tiếng Việt" },
+  {
+    id: "en-US",
+    value: "English",
+    label: "English",
+    vcn: "x4_EnUK_Lizzy_assist",
+  },
+  {
+    id: "zh-CN",
+    value: "Mandarin",
+    label: "Mandarin / 中文",
+    vcn: "x4_lingxiaoqi",
+  },
+  {
+    id: "bn-IN",
+    value: "Bengali",
+    label: "Bengali / বাংলা",
+    vcn: "x2_BnBd_Elmy",
+  },
+  { id: "ta-IN", value: "Tamil", label: "Tamil / தமிழ்", vcn: "x2_Taln_Udaya" },
+  { id: "th-TH", value: "Thai", label: "Thai / ไทย", vcn: "" },
+  {
+    id: "vi-VN",
+    value: "Vietnamese",
+    label: "Vietnamese / Tiếng Việt",
+    vcn: "x2_ViVn_ThuHien",
+  },
 ];

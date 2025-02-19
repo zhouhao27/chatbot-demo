@@ -14,7 +14,7 @@ const CryptoJS = require('crypto-js')
 import { Buffer } from 'buffer';
 import RNFS from 'react-native-fs';
 import { Platform } from 'react-native';
-import { outPutFilePath, appid, apiSecret, apiKey } from '../constants';
+import { outPutFilePath, appid, apiSecret, apiKey, LANGUAGES } from '../constants';
 import { playSound } from './index';
 
 let onMessageCallback
@@ -33,8 +33,8 @@ const config = {
     uri: "/v2/tts",
 }
 
-export default async function starttts(content, callback) {
-    console.log('starttts callback:', callback);
+export default async function starttts(content, language, callback) {
+    const lang = LANGUAGES.find((lang) => lang.label === language);
 
     onMessageCallback = callback
     // 获取当前时间 RFC1123格式
@@ -47,7 +47,7 @@ export default async function starttts(content, callback) {
     ws.onopen = () => {
         console.log("websocket connect!")
         isFilexit()
-        send(content, ws)
+        send(content, lang.vcn, ws)
     };
 
     // 得到结果后进行处理，仅供参考，具体业务具体对待
@@ -105,8 +105,8 @@ function getAuthStr(date) {
 }
 
 // 传输数据
-function send(text, ws) {
-    console.log('send:', text);
+function send(text, vcn, ws) {
+    console.log('send:', vcn, text);
     let frame = {
         "common": {
             "app_id": config.appid
@@ -114,7 +114,7 @@ function send(text, ws) {
         "business": {
             "aue": "lame",
             "sfl": 1,
-            "vcn": "xiaoyan",
+            "vcn": vcn,
             "tte": "UTF8"
         },
         "data": {
