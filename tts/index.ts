@@ -36,7 +36,8 @@ export const tts = async (text: string) => {
   }
 };
 
-export const playSound = async (filePath: string, p0: () => void) => {
+export const playSound = async (filePath: string, onComplete?: () => void) => {
+  console.log("playSound:", filePath);
   Sound.setCategory("Playback", true);
   const sound = new Sound(filePath, "", (error) => {
     if (error) {

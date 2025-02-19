@@ -17,7 +17,7 @@ import TopQuestions from "@/components/TopQuestions";
 import WelcomeMessage from "@/components/WelcomeMessage";
 import React from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
-
+import starttts from "@/tts/tts-ws-node";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -226,7 +226,10 @@ export default function Index() {
 
   const onReplay = async (content: string) => {
 
-    tts(content);
+    // tts(content);
+    starttts(content, (msg: string) => {
+      console.log('tts content:', content)
+    });
 
     // if (isReplayRunning.current) {
     //   return;

@@ -1,7 +1,15 @@
+import { Platform } from "react-native";
+import RNFS from "react-native-fs";
+
 export const GOOGLE_SPEECH_API_URL =
   "https://speech.googleapis.com/v1/speech:recognize";
 export const GOOGLE_TTS_API_URL =
   "https://texttospeech.googleapis.com/v1/text:synthesize";
+
+export const outPutFilePath =
+  (Platform.OS === "ios"
+    ? RNFS.MainBundlePath
+    : RNFS.ExternalStorageDirectoryPath + "/Download") + "/tts_result.mp3";
 
 /* export const LANGUAGES: Map<string, string> = new Map([
   ["en-US", "English"],
