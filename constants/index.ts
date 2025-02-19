@@ -6,10 +6,18 @@ export const GOOGLE_SPEECH_API_URL =
 export const GOOGLE_TTS_API_URL =
   "https://texttospeech.googleapis.com/v1/text:synthesize";
 
+// export const outPutFilePath =
+//   (Platform.OS === "ios"
+//     ? RNFS.MainBundlePath
+//     : RNFS.ExternalStorageDirectoryPath + "/Download") + "/tts_result.mp3";
+
 export const outPutFilePath =
-  (Platform.OS === "ios"
-    ? RNFS.MainBundlePath
-    : RNFS.ExternalStorageDirectoryPath + "/Download") + "/tts_result.mp3";
+  (Platform.OS === "ios" ? RNFS.MainBundlePath : RNFS.DocumentDirectoryPath) +
+  "/tts_result.mp3";
+
+export const appid = "bbf547d6";
+export const apiSecret = "MmIwZGQ1YmEyZDMxYzI1ZTRmMjljOGY5";
+export const apiKey = "07b5abadd308a3f6490da1b70fa1d41a";
 
 /* export const LANGUAGES: Map<string, string> = new Map([
   ["en-US", "English"],

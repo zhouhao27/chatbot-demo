@@ -14,12 +14,14 @@ import { Buffer } from 'buffer';
 import RNFS from 'react-native-fs';
 import { Platform } from 'react-native';
 import RNFetchBlob from 'react-native-blob-util';
+import { appid, apiSecret, apiKey } from '../constants';
 
-const inputFilePath = (Platform.OS === 'ios' ? RNFS.MainBundlePath : RNFS.DocumentDirectoryPath) + '/16k_10.pcm';
+// const inputFilePath = (Platform.OS === 'ios' ? RNFS.MainBundlePath : RNFS.DocumentDirectoryPath) + '/16k_10.pcm';
 const outPutFilePath = (Platform.OS === 'ios' ? RNFS.MainBundlePath : RNFS.DocumentDirectoryPath) + '/ita_result.txt';
+// For testing only
+const inputFilePath = '/data/user/0/sg.com.ncs.chatpoc/files/16k_10.wav';
+// const inputFilePath = (Platform.OS === 'ios' ? RNFS.MainBundlePath : '../assets/sounds') + '/16k_10.pcm';
 
-// const inputFilePath = (Platform.OS === 'ios' ? RNFS.MainBundlePath : RNFS.ExternalDirectoryPath) + '/16k_10.pcm';
-// const outPutFilePath = (Platform.OS === 'ios' ? RNFS.MainBundlePath : RNFS.ExternalDirectoryPath) + '/ita_result.txt';
 var seq = 0;
 var full_result = "";
 
@@ -29,11 +31,11 @@ const config = {
   hostUrl: "wss://iat.cn-huabei-1.xf-yun.com/v1",
   host: "iat.cn-huabei-1.xf-yun.com",
   //在控制台-我的应用-语音听写（流式版）获取
-  appid: "bbf547d6",
+  appid,
   //在控制台-我的应用-语音听写（流式版）获取
-  apiSecret: "MmIwZGQ1YmEyZDMxYzI1ZTRmMjljOGY5",
+  apiSecret,
   //在控制台-我的应用-语音听写（流式版）获取
-  apiKey: "07b5abadd308a3f6490da1b70fa1d41a",
+  apiKey,
   uri: "/v1",
 };
 
@@ -51,7 +53,8 @@ let currentSid = "";
 let wsocket;
 let onMessageCallback
 
-export default function startiat(callback) {
+export default function startiat(audioPath, callback) {
+  console.log("startiat:", audioPath);
   onMessageCallback = callback
   seq = 0
   status = FRAME.STATUS_FIRST_FRAME
@@ -64,7 +67,7 @@ export default function startiat(callback) {
   // 连接建立完毕，读取数据进行识别
   wsocket.onopen = () => {
     console.log("websocket connect!");
-    readFile()
+    readFile(audioPath)
   };
 
   // 得到结果后进行处理，仅供参考，具体业务具体对待
@@ -99,14 +102,17 @@ export default function startiat(callback) {
             }
           }
           console.log("子句最终识别结果：" + str);
-          save("子句最终识别结果：" + str + "\n")
+          // save("子句最终识别结果：" + str + "\n")
           full_result = full_result + str;
         }
 
         if (res.payload.result.status == 2) {
           currentSid = res.header.sid
           console.log("最终完整识别结果：" + full_result);
-          save("最终完整识别结果：" + full_result + "\n --------------------------------- \n")
+          // save(full_result)
+          if (onMessageCallback) {
+            onMessageCallback(full_result)
+          }
           wsocket.close()
         }
       }
@@ -198,10 +204,11 @@ function send(data) {
   }
 }
 
-async function readFile() {
+async function readFile(audioPath) {
   try {
     const stream = await RNFetchBlob.fs.readStream(
-      inputFilePath,
+      // inputFilePath,
+      audioPath,
       'base64',  // 读取编码，可选 'base64', 'utf8', 'ascii'
       1024      // 缓冲区大小，控制读取数据的块大小
     );
@@ -228,17 +235,17 @@ async function readFile() {
 }
 
 // 保存文件
-function save(data) {
-  if (onMessageCallback) {
-    onMessageCallback(data)
-  }
-  RNFS.appendFile(outPutFilePath, data, "utf8")
-    .then(() => {
-      // 写入成功
-      console.log('JSON data has been written to the file.');
-    })
-    .catch((error) => {
-      // 写入失败
-      console.error('Error writing to the JSON file:', error);
-    });
-}
+// function save(data) {
+//   if (onMessageCallback) {
+//     onMessageCallback(data)
+//   }
+//   RNFS.appendFile(outPutFilePath, data, "utf8")
+//     .then(() => {
+//       // 写入成功
+//       console.log('JSON data has been written to the file.');
+//     })
+//     .catch((error) => {
+//       // 写入失败
+//       console.error('Error writing to the JSON file:', error);
+//     });
+// }

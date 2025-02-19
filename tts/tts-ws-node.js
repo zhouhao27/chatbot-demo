@@ -14,7 +14,7 @@ const CryptoJS = require('crypto-js')
 import { Buffer } from 'buffer';
 import RNFS from 'react-native-fs';
 import { Platform } from 'react-native';
-import { outPutFilePath } from '../constants';
+import { outPutFilePath, appid, apiSecret, apiKey } from '../constants';
 import { playSound } from './index';
 
 let onMessageCallback
@@ -24,11 +24,11 @@ const config = {
     hostUrl: "wss://tts-api.xfyun.cn/v2/tts",
     host: "tts-api.xfyun.cn",
     //在控制台-我的应用-在线语音合成（流式版）获取
-    appid: "bbf547d6",
+    appid,
     //在控制台-我的应用-在线语音合成（流式版）获取
-    apiSecret: "MmIwZGQ1YmEyZDMxYzI1ZTRmMjljOGY5",
+    apiSecret,
     //在控制台-我的应用-在线语音合成（流式版）获取
-    apiKey: "07b5abadd308a3f6490da1b70fa1d41a",
+    apiKey,
     text: "这是一个例子，请输入您要合成的文本",
     uri: "/v2/tts",
 }

@@ -18,6 +18,8 @@ import WelcomeMessage from "@/components/WelcomeMessage";
 import React from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import starttts from "@/tts/tts-ws-node";
+import startiat from "@/stt/iat-ws-node";
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -263,10 +265,14 @@ export default function Index() {
   const stopRecord = async () => {
     const audioFile = await stopRecording();
 
-    const text = await convertToText(audioFile);
-    if (text) {
+    // const text = await convertToText(audioFile);
+    // if (text) {
+    //   getCompletion(text);
+    // }
+    // start stt
+    startiat(audioFile, (text: string) => {
       getCompletion(text);
-    }
+    });
   };
 
   const startNewSession = () => {

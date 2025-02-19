@@ -24,6 +24,7 @@ class SoundManager {
    */
   public async playSound(sound: Sound, onComplete?: () => void) {
     this.stopSound(() => {
+      console.log("playSound:");
       this.currentPlayingSound = sound;
 
       sound.play((success) => {
