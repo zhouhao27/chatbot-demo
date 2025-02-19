@@ -47,7 +47,7 @@ export const LANGUAGES = [
     vcn: "x2_BnBd_Elmy",
   },
   { id: "ta-IN", value: "Tamil", label: "Tamil / தமிழ்", vcn: "x2_Taln_Udaya" },
-  { id: "th-TH", value: "Thai", label: "Thai / ไทย", vcn: "" },
+  { id: "th-TH", value: "Thai", label: "Thai / ไทย", vcn: "x2_ThTh_Suparut" },
   {
     id: "vi-VN",
     value: "Vietnamese",
