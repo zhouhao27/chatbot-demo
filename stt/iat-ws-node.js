@@ -12,15 +12,10 @@
 const CryptoJS = require("crypto-js");
 import { Buffer } from 'buffer';
 import RNFS from 'react-native-fs';
-import { Platform } from 'react-native';
 import RNFetchBlob from 'react-native-blob-util';
 import { appid, apiSecret, apiKey } from '../constants';
 
-// const inputFilePath = (Platform.OS === 'ios' ? RNFS.MainBundlePath : RNFS.DocumentDirectoryPath) + '/16k_10.pcm';
-const outPutFilePath = (Platform.OS === 'ios' ? RNFS.MainBundlePath : RNFS.DocumentDirectoryPath) + '/ita_result.txt';
-// For testing only
-const inputFilePath = '/data/user/0/sg.com.ncs.chatpoc/files/16k_10.wav';
-// const inputFilePath = (Platform.OS === 'ios' ? RNFS.MainBundlePath : '../assets/sounds') + '/16k_10.pcm';
+const inputFilePath = RNFS.DocumentDirectoryPath + '/16k_10.pcm';
 
 var seq = 0;
 var full_result = "";
@@ -68,6 +63,7 @@ export default function startiat(audioPath, callback) {
   wsocket.onopen = () => {
     console.log("websocket connect!");
     readFile(audioPath)
+    return;
   };
 
   // 得到结果后进行处理，仅供参考，具体业务具体对待
@@ -110,7 +106,7 @@ export default function startiat(audioPath, callback) {
           currentSid = res.header.sid
           console.log("最终完整识别结果：" + full_result);
           // save(full_result)
-          if (onMessageCallback) {
+          if (full_result.length > 0 && onMessageCallback) {
             onMessageCallback(full_result)
           }
           wsocket.close()
@@ -206,16 +202,25 @@ function send(data) {
 
 async function readFile(audioPath) {
   try {
+    // Testing only
+    // audioPath = inputFilePath
+
+    const isFileExist = await RNFS.exists(audioPath)
+    if (!isFileExist) {
+      console.log('File not exist')
+      return;
+    }
+
     const stream = await RNFetchBlob.fs.readStream(
-      // inputFilePath,
       audioPath,
       'base64',  // 读取编码，可选 'base64', 'utf8', 'ascii'
       1024      // 缓冲区大小，控制读取数据的块大小
     );
 
     stream.open();
+
     stream.onData((chunk) => {
-      //  console.log('Received chunk:', chunk);
+      // console.log('Received chunk:', chunk);
       send(chunk)
     });
 

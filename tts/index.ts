@@ -40,6 +40,7 @@ export const playSound = async (filePath: string, onComplete?: () => void) => {
   Sound.setCategory("Playback", true);
   const sound = new Sound(filePath, "", (error) => {
     if (error) {
+      console.log("Failed to load the sound", error);
       Alert.alert("Error", "Failed to load the sound");
       return;
     }
