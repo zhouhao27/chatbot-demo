@@ -7,6 +7,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+  [[AVAudioSession sharedInstance] setActive:YES error:nil];
+
   self.moduleName = @"main";
 
   // You can add your custom initial props in the dictionary below.
