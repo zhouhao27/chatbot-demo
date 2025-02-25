@@ -352,9 +352,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = chatgpt/chatgpt.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development: Hao Zhou (SRSSGJDLU8)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Hao Zhou (MZ9J22X9A9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Hao Zhou (MZ9J22X9A9)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Q9D5QHASNP;
 				ENABLE_BITCODE = NO;
@@ -379,7 +380,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = sg.com.ncs.chatpoc;
 				PRODUCT_NAME = "Chatbot-Demo";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MOM Chat POC Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MOM-POC-development";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -402,7 +403,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: NCS Pte Ltd (Q9D5QHASNP)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: NCS Pte Ltd (Q9D5QHASNP)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Q9D5QHASNP;
 				GCC_PREPROCESSOR_DEFINITIONS = (

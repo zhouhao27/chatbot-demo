@@ -6,14 +6,7 @@ export const GOOGLE_SPEECH_API_URL =
 export const GOOGLE_TTS_API_URL =
   "https://texttospeech.googleapis.com/v1/text:synthesize";
 
-// export const outPutFilePath =
-//   (Platform.OS === "ios"
-//     ? RNFS.MainBundlePath
-//     : RNFS.ExternalStorageDirectoryPath + "/Download") + "/tts_result.mp3";
-
-export const outPutFilePath =
-  (Platform.OS === "ios" ? RNFS.MainBundlePath : RNFS.DocumentDirectoryPath) +
-  "/tts_result.mp3";
+export const outPutFilePath = RNFS.DocumentDirectoryPath + "/tts_result.mp3";
 
 export const appid = "bbf547d6";
 export const apiSecret = "MmIwZGQ1YmEyZDMxYzI1ZTRmMjljOGY5";
